@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta content="Page de connexion" name="description">
+    
+    <link href="/img/login.png" rel="shortcut icon">
+    <link href="/css/login.css" rel="stylesheet" type="text/css">
+    
+    {% if titre %}
+    <title>Labo 3 - {{ titre }}</title>
+    {% else %}
+    <title>Labo 3 - Benoit Mignault</title>
+    {% endif %}
+    <style>
+        body {
+            margin: 0;
+            /* Fichier photoPoker.jpg est une propriété du site https://pixabay.com/fr/syst%C3%A8me-r%C3%A9seau-actualit%C3%A9s-connexion-2457651/ sous licence libre */
+            background-image: url("/img/photologin.jpg");
+            background-position: center;
+            background-attachment: fixed;
+            background-size: 100%;
+        }
+    </style>
+</head>
+<body>
+    {% block content %}{% endblock %}
+</body>
+</html>
