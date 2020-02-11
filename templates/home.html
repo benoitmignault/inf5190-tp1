@@ -1,13 +1,36 @@
 {% extends "layout.html" %}
 {% block content %}
-<div class="content">
-    <div class="center">
-        <p>Bienvenue au laboratoire 3</p>
-        <p>Ce laboratoire consistera à manipuler la gestion d'une BD avec SQLite3</p>
-        <p>Les actions possibles : S'inscrire / Se connecter</p>
-        <a class="boutonLink" href="/login">Se Connecter</a>
-        <a class="boutonLink" href="/register">S'enregistrer</a>
-        <p>Bonne journée !</p>
+<h1>Bienvenue à la page accueil du site de gestion des inventaires</h1>
+<div class="container">
+    <h2>Section pour rechercher un article parmis l'inventaire</h2>
+    <form action="./recherche" method="post">
+        <div class='formulaire_joueur'>
+            <div class="article">
+                <input id="recher_article" maxlength="200" name="recher_article" type="text"
+                       value="">
+                <input class="bouton" type="submit" value="Recherche...">
+                <input class="bouton" type="reset" value="Effacer...">
+            </div>
+            
+            {% if 1 != 1 %}
+            <div class="bas_formulaire">
+                <p class="erreur"></p>
+            </div>
+            {% endif %}
+        </div>
+    </form>
+    <h2>Affichage des 5 derniers articles en date du jour</h2>
+    
+    <!-- Affichage d'un <div class='formulaire_joueur'> par article -->
+    
+    <!-- Si aucune publicxation afficher un message avertissement.... -->
+    
+    <h2>Section pour l'administrateur du site</h2>
+    <div class='formulaire_joueur'>
+        <div class="article admin">
+            <a class="bouton" href="/admin">Afficher l'ensemble des articles</a>
+            <a class="bouton" href="/admin-nouveau">Ajouter un nouvel article</a>
+        </div>
     </div>
 </div>
 {% endblock content %}

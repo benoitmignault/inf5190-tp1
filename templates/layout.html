@@ -4,30 +4,32 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
-    <meta content="Page de connexion" name="description">
-    
+    <meta content="Gestion d'une Bibliotheque" name="description">
+    <!-- «Réutilisation permise» -->
     <!-- https://pixabay.com/fr/illustrations/livres-ic%C3%B4ne-ic%C3%B4ne-de-livre-symbole-1673578/  -->
     <link href="/img/icone-web.png" rel="shortcut icon">
-    <link href="/css/login.css" rel="stylesheet" type="text/css">
+    <link href="/css/admin.css" rel="stylesheet" type="text/css">
     
     {% if titre %}
-    <title>Labo 3 - {{ titre }}</title>
+    <title>Biblio - {{ titre }}</title>
     {% else %}
-    <title>Labo 3 - Benoit Mignault</title>
+    <title>Biblio - CMS</title>
     {% endif %}
     <style>
         body {
             margin: 0;
-            /* Fichier photoPoker.jpg est une propriété du site https:
+            /*
+                Cette photo est sous licence «Réutilisation permise»
+                Fichier biblio.jpg est une propriété du site https:
                 https://www.flickr.com/photos/remimathis/4657620728/in/photostream/
             */
             background-image: url("/img/biblio.jpg");
-            background-position: top;
+            background-position: center;
             background-attachment: fixed;
             background-size: 100%;
             background-repeat: no-repeat;
-            background-color: black;
         }
+    
     </style>
 </head>
 <body>

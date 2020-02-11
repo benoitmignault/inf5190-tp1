@@ -1,6 +1,3 @@
-import hashlib
-import uuid
-
 from flask import Flask
 from flask import redirect
 from flask import render_template
@@ -10,9 +7,6 @@ from .function import *
 
 app = Flask(__name__, static_url_path='', static_folder='static')
 
-app.secret_key = "(*&*&322387he738220)(*(*22347657"
-
-
 @app.teardown_appcontext
 def close_connection(exception):
     db = getattr(g, '_database', None)
@@ -20,8 +14,7 @@ def close_connection(exception):
         db.disconnect()
 
 
-@app.route('/')
-@app.route('/home')
+@app.route('/', methods=["GET"])
 def home():
     return render_template('home.html', titre="Présentation")
 
@@ -61,12 +54,6 @@ def formulaire_creation():
 
 @app.route('/login', methods=["GET", "POST"])
 def logging_utilisateur():
-    """
-        # Accès autorisé
-        id_session = uuid.uuid4().hex
-        get_db().save_session(id_session, username)
-        session["id"] = id_session
-    """
     liste_champs = initial_champ()  # Création de la liste d'information nécessaire
     liste_validation = initial_champ_validation()  # Création des indicateurs erreurs
     messages = []
