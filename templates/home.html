@@ -4,30 +4,23 @@
 <div class="container">
     <h2>Section pour rechercher un article dans l'inventaire</h2>
     <form action="./recherche" method="post">
-        <div class='formulaire_joueur'>
+        <div class='zone_recherche'>
             <div class="article">
-                <input id="recher_article" maxlength="50" minlength="4" name="recher_article"
+                <input id="recher_article" maxlength="25" minlength="3" name="recher_article"
                        oninvalid="this.setCustomValidity('Le texte recherché doit être entre 4 et 50 caractères')"
-                       pattern="[a-zA-Z]{4,50}" placeholder="abcd" oninput="setCustomValidity('')"
-                       required title="mot recherché doit faire entre 4 à 50 charactères" type="search" value="">
+                       pattern="[a-zA-Z]{4,50}" placeholder="abc" oninput="setCustomValidity('')"
+                       required title="mot recherché doit faire entre 3 à 25 charactères" type="search" value="">
                 <input class="bouton" type="submit" value="Recherche...">
                 <input class="bouton" type="reset" value="Effacer...">
             </div>
-            
-            {% if 1 != 1 %}
-            <div class="bas_formulaire">
-                <p class="erreur"></p>
-            </div>
-            {% endif %}
         </div>
     </form>
     {% if aucun_article_recent %}
     <h3 class="aucun">Aucun article est en date du jour dans l'inventaire !</h3>
     {% else %}
     <h2>Section des <span>{{nombre_article}}</span> articles les plus récents</h2>
-    
     {% for cle1, valeur1 in ensemble.items() %}
-    <div class='formulaire_joueur'>
+    <div class='zone_article_recent'>
         <table class="tabeau_article">
             <tbody>
                 {% for cle2, valeur2 in valeur1.items() %}
@@ -38,22 +31,12 @@
                 {% endfor %}
             </tbody>
         </table>
-    
-    
     </div>
     {% endfor %}
-    
-    
     {% endif %}
-    
-    
-    <!-- Affichage d'un <div class='formulaire_joueur'> par article -->
-    
-    <!-- Si aucune publicxation afficher un message avertissement.... -->
-    
     <h2>Section pour l'administrateur du site</h2>
-    <div class='formulaire_joueur'>
-        <div class="article admin">
+    <div class='zone_admin'>
+        <div class="admin">
             <a class="bouton" href="/admin">Afficher l'ensemble des articles</a>
             <a class="bouton" href="/admin-nouveau">Ajouter un nouvel article</a>
         </div>
