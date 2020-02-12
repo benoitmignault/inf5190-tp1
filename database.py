@@ -18,18 +18,19 @@ class Database:
     def get_articles_recents(self):
         date_auj = date.today()
         cursor = self.get_connection().cursor()
-        cursor.execute(
-            "select titre, identifiant, auteur, date_publication, paragraphe from article where date_publication <=? ",
-            (date_auj,))
+        select = "select titre, identifiant, auteur, date_publication, paragraphe "
+        fromm = "from article "
+        where = "where date_publication <=? "
+        order_by = "order by date_publication desc"
+        sql = select + fromm + where + order_by
+        cursor.execute(sql, (date_auj,))
         result = cursor.fetchall()
         ensemble = {}  # L'ensemble des articles jusqu'à un max de 5 des plus récents
         if result is not None:
-            i = 0
             for un_article in result:
                 sous_ensemble = {'Titre': un_article[0], 'Identifiant': un_article[1], 'Auteur': un_article[2],
                                  'Date de publication': un_article[3], 'Contenu': un_article[4]}
-                ensemble[i] = sous_ensemble
-                i += 1
+                ensemble[un_article[1]] = sous_ensemble
 
         return ensemble
 

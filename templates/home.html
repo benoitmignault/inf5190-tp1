@@ -8,7 +8,7 @@
             <div class="article">
                 <input id="recher_article" maxlength="50" minlength="4" name="recher_article"
                        oninvalid="this.setCustomValidity('Le texte recherché doit être entre 4 et 50 caractères')"
-                       pattern="[a-zA-Z]{4,50}" placeholder="abcd"
+                       pattern="[a-zA-Z]{4,50}" placeholder="abcd" oninput="setCustomValidity('')"
                        required title="mot recherché doit faire entre 4 à 50 charactères" type="search" value="">
                 <input class="bouton" type="submit" value="Recherche...">
                 <input class="bouton" type="reset" value="Effacer...">
@@ -24,7 +24,7 @@
     {% if aucun_article_recent %}
     <h3 class="aucun">Aucun article est en date du jour dans l'inventaire !</h3>
     {% else %}
-    <h2>Affichage des <span>{{nombre_article}}</span> derniers articles en date du jour</h2>
+    <h2>Section des <span>{{nombre_article}}</span> articles les plus récents</h2>
     
     {% for cle1, valeur1 in ensemble.items() %}
     <div class='formulaire_joueur'>
