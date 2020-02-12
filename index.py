@@ -3,9 +3,11 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import url_for
+
 from .function import *
 
 app = Flask(__name__, static_url_path='', static_folder='static')
+
 
 @app.teardown_appcontext
 def close_connection(exception):
@@ -16,7 +18,15 @@ def close_connection(exception):
 
 @app.route('/', methods=["GET"])
 def home():
-    return render_template('home.html', titre="Présentation")
+    conn_db = get_db()
+    ensemble = conn_db.get_articles_recents()
+    aucun_article_recent = False
+
+    if len(ensemble) == 0:
+        aucun_article_recent = True
+
+    return render_template('home.html', titre="Présentation", aucun_article_recent=aucun_article_recent,
+                           ensemble=ensemble, nombre_article=len(ensemble))
 
 
 @app.route('/register', methods=["GET", "POST"])
@@ -46,9 +56,9 @@ def formulaire_creation():
                                    liste_validation=liste_validation, messages=messages)
         else:
             # On peut maintenant prendre le password du client et le securiser
-            salt = uuid.uuid4().hex
-            hashed_password = hashlib.sha512(str(liste_champs['password'] + salt).encode("utf-8")).hexdigest()
-            conn_db.create_user(liste_champs['user'], liste_champs['email'], salt, hashed_password)
+            # salt = uuid.uuid4().hex
+            # hashed_password = hashlib.sha512(str(liste_champs['password'] + salt).encode("utf-8")).hexdigest()
+            # conn_db.create_user(liste_champs['user'], liste_champs['email'], salt, hashed_password)
             return redirect(url_for('.creation_user_ok'))
 
 
@@ -71,9 +81,9 @@ def logging_utilisateur():
 
         if user is not None:
             salt = user[0]  # la maniere de crypté le password
-            hashed_password = hashlib.sha512(str(liste_champs['password'] + salt).encode("utf-8")).hexdigest()
-            if not hashed_password == user[1]:
-                liste_validation['password_invalide'] = True
+            # hashed_password = hashlib.sha512(str(liste_champs['password'] + salt).encode("utf-8")).hexdigest()
+            # if not hashed_password == user[1]:
+            # liste_validation['password_invalide'] = True
 
         else:
             liste_validation['user_inexistant'] = True

@@ -2,12 +2,14 @@
 {% block content %}
 <h1>Bienvenue à la page accueil du site de gestion des inventaires</h1>
 <div class="container">
-    <h2>Section pour rechercher un article parmis l'inventaire</h2>
+    <h2>Section pour rechercher un article dans l'inventaire</h2>
     <form action="./recherche" method="post">
         <div class='formulaire_joueur'>
             <div class="article">
-                <input id="recher_article" maxlength="200" name="recher_article" type="text"
-                       value="">
+                <input id="recher_article" maxlength="50" minlength="4" name="recher_article"
+                       oninvalid="this.setCustomValidity('Le texte recherché doit être entre 4 et 50 caractères')"
+                       pattern="[a-zA-Z]{4,50}" placeholder="abcd"
+                       required title="mot recherché doit faire entre 4 à 50 charactères" type="search" value="">
                 <input class="bouton" type="submit" value="Recherche...">
                 <input class="bouton" type="reset" value="Effacer...">
             </div>
@@ -19,7 +21,31 @@
             {% endif %}
         </div>
     </form>
-    <h2>Affichage des 5 derniers articles en date du jour</h2>
+    {% if aucun_article_recent %}
+    <h3 class="aucun">Aucun article est en date du jour dans l'inventaire !</h3>
+    {% else %}
+    <h2>Affichage des <span>{{nombre_article}}</span> derniers articles en date du jour</h2>
+    
+    {% for cle1, valeur1 in ensemble.items() %}
+    <div class='formulaire_joueur'>
+        <table class="tabeau_article">
+            <tbody>
+                {% for cle2, valeur2 in valeur1.items() %}
+                <tr>
+                    <td class="cle">{{cle2}} :</td>
+                    <td class="valeur">{{valeur2}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    
+    
+    </div>
+    {% endfor %}
+    
+    
+    {% endif %}
+    
     
     <!-- Affichage d'un <div class='formulaire_joueur'> par article -->
     

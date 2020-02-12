@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import date
 
 
 class Database:
@@ -14,6 +15,24 @@ class Database:
         if self.connection is not None:
             self.connection.close()
 
+    def get_articles_recents(self):
+        date_auj = date.today()
+        cursor = self.get_connection().cursor()
+        cursor.execute(
+            "select titre, identifiant, auteur, date_publication, paragraphe from article where date_publication <=? ",
+            (date_auj,))
+        result = cursor.fetchall()
+        ensemble = {}  # L'ensemble des articles jusqu'à un max de 5 des plus récents
+        if result is not None:
+            i = 0
+            for un_article in result:
+                sous_ensemble = {'Titre': un_article[0], 'Identifiant': un_article[1], 'Auteur': un_article[2],
+                                 'Date de publication': un_article[3], 'Contenu': un_article[4]}
+                ensemble[i] = sous_ensemble
+                i += 1
+
+        return ensemble
+
     def create_user(self, username, email, salt, hashed_password):
         connection = self.get_connection()
         connection.execute("insert into users(utilisateur, email, salt, hash) values(?, ?, ?, ?)",
@@ -24,7 +43,6 @@ class Database:
     def verify_user_exist(self, liste_validation, username, email):
         cursor = self.get_connection().cursor()
         cursor.execute("select utilisateur, email from users where utilisateur=? OR email=?", (username, email,))
-        # nb_result = cursor.rowcount # Ceci n'existe pas
 
         result = cursor.fetchall()
         if result is not None:

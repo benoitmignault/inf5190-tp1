@@ -7,6 +7,16 @@
 
 body {
     margin: 0;
+    /*
+        Cette photo est sous licence «Réutilisation permise»
+        Fichier biblio.jpg est une propriété du site https:
+        https://www.flickr.com/photos/remimathis/4657620728/in/photostream/
+    */
+    background-image: url("/img/biblio.jpg");
+    background-position: center;
+    background-attachment: fixed;
+    background-size: 100%;
+    background-repeat: no-repeat;
 }
 
 h1 {
@@ -69,14 +79,25 @@ h2 {
 .container > .formulaire_joueur > .admin{
     margin-top: 5px;
 }
-
+.container > .aucun{
+    font-size: 18px;
+    color: red;
+    font-weight: bold;
+    text-align: center;
+}
 
 .container > form > .formulaire_joueur > .date > div {
     width: 100%;
 }
+placeholder{
+    text-align:center;
+}
+span{
+    color:green;
+    font-weight: bold;
+}
 
-.container > form > .formulaire_joueur > div > input[type=text],
-.container > form > .formulaire_Nouveau > div > input[type=text],
+.container > form > .formulaire_joueur > div > input[type=search],
 .container > form > .formulaire_joueur > div > div > input[type=date] {
     border-radius: 10px;
     padding: 5px;
@@ -86,11 +107,11 @@ h2 {
     margin-right: 10px;
 }
 
-.container > form > .formulaire_joueur > .erreur > input[type=text],
-.container > form > .formulaire_Nouveau > .erreur > input[type=text] {
+.container > form > .formulaire_joueur > .bas_formulaire > .erreur{
     border: 2px solid red;
     background: #FCDEDE;
 }
+
 
 .container > form > .formulaire_joueur > .bas_formulaire {
     width: 100%;
@@ -120,6 +141,26 @@ h2 {
     font-weight: bold;
     width: 100%;
     text-align: center;
+}
+.container > .formulaire_joueur > .tabeau_article{
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid black;
+    padding: 10px;
+}
+
+td{
+    padding: 5px;
+}
+.container > .formulaire_joueur > .tabeau_article .cle{
+    font-weight: bold;
+    text-align: right;
+    width: 30%;
+}
+
+.container > .formulaire_joueur > .tabeau_article .valeur{
+    text-align: left;
+    width: 70%;
 }
 
 .container > form > .formulaire_Nouveau > div {
