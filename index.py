@@ -1,12 +1,10 @@
-from flask import Flask
-from flask import redirect
-from flask import render_template
-from flask import request
-from flask import url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 
 from .function import *
 
 app = Flask(__name__, static_url_path='', static_folder='static')
+
+app.secret_key = "(*&*&322387he738220)(*(*22347657"
 
 
 @app.teardown_appcontext
@@ -18,90 +16,62 @@ def close_connection(exception):
 
 @app.route('/', methods=["GET"])
 def home():
+    liste_champs = initial_champ()  # Création de la liste d'information nécessaire
+    liste_validation = initial_champ_validation()  # Création des indicateurs erreurs
     conn_db = get_db()
-    ensemble = conn_db.get_articles_recents()
-    aucun_article_recent = False
 
-    if len(ensemble) == 0:
-        aucun_article_recent = True
+    # Les quatre lignes suivantes pourrait être mise dans une fonction plutard
+    ensemble_recent = conn_db.get_articles_recents()
+    liste_champs['nb_article_recent'] = len(ensemble_recent)
+    if liste_champs['nb_article_recent'] == 0:
+        liste_validation['aucun_article_recent'] = True
+    # Fin du bloque des 4 lignes
 
-    return render_template('home.html', titre="Présentation", aucun_article_recent=aucun_article_recent,
-                           ensemble=ensemble, nombre_article=len(ensemble))
+    liste_validation = situation_erreur(liste_validation)
+    liste_champs['messages'] = message_erreur(liste_validation)
+    return render_template('home.html', titre="Présentation", liste_validation=liste_validation,
+                           ensemble_recent=ensemble_recent, liste_champs=liste_champs)
 
 
-@app.route('/register', methods=["GET", "POST"])
-def formulaire_creation():
+@app.route('/recherche', methods=["POST"])
+def recherche_article():
     liste_champs = initial_champ()  # Création de la liste d'information nécessaire
     liste_validation = initial_champ_validation()  # Création des indicateurs erreurs
-    messages = []
+    liste_champs = remplissage_champs(request.form, liste_champs)
+    liste_validation = validation_champs(liste_champs, liste_validation)
+    conn_db = get_db()
+    ensemble_trouve = {}
+    if not liste_validation['champ_recher_article_vide']:
+        ensemble_trouve = conn_db.get_articles_trouvees(liste_champs['recher_article'])
+        liste_champs['nb_article_trouve'] = len(ensemble_trouve)
 
-    if request.method == "GET":
-        return render_template("register.html", titre="Enregistrement En Cours", messages=messages,
-                               liste_validation=liste_validation)
+        if liste_champs['nb_article_trouve'] == 0:
+            liste_validation['aucun_article_trouve'] = True
+
+    liste_validation = situation_erreur(liste_validation)
+    if liste_validation['situation_erreur']:
+        # Les quatre lignes suivantes pourrait être mise dans une fonction plutard
+        ensemble_recent = conn_db.get_articles_recents()
+        liste_champs['nb_article_recent'] = len(ensemble_recent)
+        if liste_champs['nb_article_recent'] == 0:
+            liste_validation['aucun_article_recent'] = True
+        # Fin du bloque des 4 lignes
+
+        liste_champs['messages'] = message_erreur(liste_validation)
+        return render_template("home.html", titre="Problème avec la recherche", ensemble_recent=ensemble_recent,
+                               liste_validation=liste_validation, liste_champs=liste_champs)
     else:
-        liste_champs['user'] = request.form['user']
-        liste_champs['password'] = request.form['password']
-        liste_champs['email'] = request.form['email']
-        liste_validation = validation_creation_user(liste_champs, liste_validation)
-
-        # On commence par vérifier si le user existe ou pas dans la bd
-        conn_db = get_db()
-        if not liste_validation['champs_vides']:
-            liste_validation = conn_db.verify_user_exist(liste_validation, liste_champs['user'], liste_champs['email'])
-
-        liste_validation['situation_erreur'] = situation_erreur(liste_validation)
-        if liste_validation['situation_erreur']:
-            messages = message_erreur(liste_validation)
-            return render_template("register.html", titre="Problème d'enregistrement",
-                                   liste_validation=liste_validation, messages=messages)
-        else:
-            # On peut maintenant prendre le password du client et le securiser
-            # salt = uuid.uuid4().hex
-            # hashed_password = hashlib.sha512(str(liste_champs['password'] + salt).encode("utf-8")).hexdigest()
-            # conn_db.create_user(liste_champs['user'], liste_champs['email'], salt, hashed_password)
-            return redirect(url_for('.creation_user_ok'))
+        session['titre'] = "Recherche réussi !"
+        session['ensemble_trouve'] = ensemble_trouve
+        session['liste_champs'] = liste_champs
+        return redirect(
+            url_for('.recherche_article_trouve'))
 
 
-@app.route('/login', methods=["GET", "POST"])
-def logging_utilisateur():
-    liste_champs = initial_champ()  # Création de la liste d'information nécessaire
-    liste_validation = initial_champ_validation()  # Création des indicateurs erreurs
-    messages = []
-    if request.method == "GET":
-        return render_template("login.html", titre="Connexion En Cours", messages=messages,
-                               liste_validation=liste_validation)
-    else:
-        liste_champs['user'] = request.form['user']
-        liste_champs['password'] = request.form['password']
-        liste_validation = validation_ouverture_session(liste_champs, liste_validation)
-        # On commence par vérifier si le user existe ou pas dans la bd
-        conn_db = get_db()
-        if not liste_validation['champs_vides']:
-            user = conn_db.get_user_login_info(liste_champs['user'])
-
-        if user is not None:
-            salt = user[0]  # la maniere de crypté le password
-            # hashed_password = hashlib.sha512(str(liste_champs['password'] + salt).encode("utf-8")).hexdigest()
-            # if not hashed_password == user[1]:
-            # liste_validation['password_invalide'] = True
-
-        else:
-            liste_validation['user_inexistant'] = True
-
-        liste_validation['situation_erreur'] = situation_erreur(liste_validation)
-        if liste_validation['situation_erreur']:
-            messages = message_erreur(liste_validation)
-            return render_template("login.html", titre="Problème de connexion",
-                                   liste_validation=liste_validation, messages=messages)
-        else:
-            return redirect(url_for('.connexion_user_ok', user=liste_champs['user']))
-
-
-@app.route('/creation_user_ok')
-def creation_user_ok():
-    return render_template("creation_user_ok.html", nom_lien_web="Creation user reussi !!!")
-
-
-@app.route('/connexion_user_ok/<user>')
-def connexion_user_ok(user):
-    return render_template("connexion_user_ok.html", user=user)
+@app.route('/recherche_article_trouve/')
+def recherche_article_trouve():
+    titre = session['titre']
+    ensemble_trouve = session['ensemble_trouve']
+    liste_champs = session['liste_champs']
+    return render_template("recherche_trouve.html", titre=titre, ensemble_trouve=ensemble_trouve,
+                           liste_champs=liste_champs)

@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+{% block content %}
+{{ensemble_trouve}}
+<h1>Voici le résultat de votre recherche avec le texte «{{liste_champs['recher_article']}}» !</h1>
+<div class="container">
+    <h2>Section des <span>{{liste_champs['nb_article_trouve']}}</span> articles trouvés lors de la recherche</h2>
+    {% for cle1, valeur1 in ensemble_trouve.items() %}
+    <div class='zone_article_recent'>
+        <table class="tabeau_article">
+            <tbody>
+                {% set identifiant = '' %}
+                {% set titre = '' %}
+                
+                {% for cle2, valeur2 in valeur1.items() %}
+                    {% if cle2 == 'Date de publication' %}
+                    <tr>
+                        <td class="cle">{{cle2}} :</td>
+                        <td class="valeur">{{valeur2}}</td>
+                    </tr>
+                    {% elif cle2 == 'Identifiant' %}
+                        {% set identifiant = 345465 %}
+                    {% else %}
+                        {% set titre = 56565 %}
+                    {% endif %}
+                {% endfor %}
+                <tr>
+                    <td class="cle">{{identifiant|pprint}} :</td>
+                    <td class="valeur">{{titre|pprint}}</td>
+                </tr>
+                <!--
+                {% set cles = [] %}
+                {% set valeurs = [] %}
+                {% for cle2, valeur2 in valeur1.items() %}
+                {{ cles.append(cle2) }}
+                {{ valeurs.append(valeur2) }}
+                {% endfor %}
+                {{ cles|pprint}}
+                
+                
+                <tr>
+                    <td class="cle">{{cle2}} :</td>
+                    <td class="valeur">{{valeur2}}</td>
+                </tr>
+                -->
+            </tbody>
+        </table>
+    </div>
+    {% endfor %}
+
+
+</div>
+
+<!--
+{{titre}}
+
+{{liste_champs}}
+-->
+{% endblock content %}

@@ -7,19 +7,27 @@
         <div class='zone_recherche'>
             <div class="article">
                 <input id="recher_article" maxlength="25" minlength="3" name="recher_article"
-                       oninvalid="this.setCustomValidity('Le texte recherché doit être entre 4 et 50 caractères')"
-                       pattern="[a-zA-Z]{4,50}" placeholder="abc" oninput="setCustomValidity('')"
+                       oninput="setCustomValidity('')"
+                       oninvalid="this.setCustomValidity('Le texte recherché doit être entre 3 et 25 caractères')"
+                       pattern="[a-zA-Z-_']{3,25}" placeholder="abc"
                        required title="mot recherché doit faire entre 3 à 25 charactères" type="search" value="">
                 <input class="bouton" type="submit" value="Recherche...">
                 <input class="bouton" type="reset" value="Effacer...">
             </div>
+            {% if liste_validation['aucun_article_trouve'] %}
+            {% for un_message in liste_champs['messages'] %}
+            <p class="aucun">{{un_message}}</p>
+            {% endfor %}
+            {% endif %}
         </div>
     </form>
-    {% if aucun_article_recent %}
-    <h3 class="aucun">Aucun article est en date du jour dans l'inventaire !</h3>
+    {% if liste_validation['aucun_article_recent'] %}
+    {% for un_message in liste_champs['messages'] %}
+    <p class="aucun">{{un_message}}</p>
+    {% endfor %}
     {% else %}
-    <h2>Section des <span>{{nombre_article}}</span> articles les plus récents</h2>
-    {% for cle1, valeur1 in ensemble.items() %}
+    <h2>Section des <span>{{liste_champs['nb_article_recent']}}</span> articles les plus récents</h2>
+    {% for cle1, valeur1 in ensemble_recent.items() %}
     <div class='zone_article_recent'>
         <table class="tabeau_article">
             <tbody>

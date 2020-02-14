@@ -76,37 +76,12 @@ h2 {
     margin-right: 10px;
 }
 
-.container > form > .zone_recherche > .article > .bouton {
-    background: #507d99;
-    background-image: -webkit-linear-gradient(top, #507d99, #96cceb);
-    background-image: -moz-linear-gradient(top, #507d99, #96cceb);
-    background-image: -ms-linear-gradient(top, #507d99, #96cceb);
-    background-image: -o-linear-gradient(top, #507d99, #96cceb);
-    background-image: linear-gradient(to bottom, #507d99, #96cceb);
-    -webkit-border-radius: 28;
-    -moz-border-radius: 28;
-    border-radius: 28px;
-    font-family: Georgia;
-    color: #ffffff;
-    font-size: 18px;
-    padding: 5px 5px 5px 5px;
-    border: solid #8c711f 3px;
-    margin-right: 10px;
-    text-decoration: none;
-}
-.container > form > .zone_recherche > .article > .bouton:hover {
-    background: #c7dced;
-    background-image: -webkit-linear-gradient(top, #c7dced, #6f8491);
-    background-image: -moz-linear-gradient(top, #c7dced, #6f8491);
-    background-image: -ms-linear-gradient(top, #c7dced, #6f8491);
-    background-image: -o-linear-gradient(top, #c7dced, #6f8491);
-    background-image: linear-gradient(to bottom, #c7dced, #6f8491);
-    cursor: pointer;
-}
-
-.container > form > .formulaire_joueur > .bas_formulaire > .erreur{
-    border: 2px solid red;
-    background: #FCDEDE;
+.container > .aucun, .container > form > .zone_recherche .aucun{
+    font-weight: bold;
+    color:red;
+    font-size: 20px;
+    text-align: center;
+    margin: 5px;
 }
 
 .container h2 span{
@@ -138,4 +113,34 @@ h2 {
 
 .container > .zone_admin{
     margin-bottom: 0px;
+}
+
+.container > form > .zone_recherche > .article > .bouton,
+.container > .zone_admin > .admin > .bouton{
+    background: #507d99;
+    background-image: -webkit-linear-gradient(top, #507d99, #96cceb);
+    background-image: -moz-linear-gradient(top, #507d99, #96cceb);
+    background-image: -ms-linear-gradient(top, #507d99, #96cceb);
+    background-image: -o-linear-gradient(top, #507d99, #96cceb);
+    background-image: linear-gradient(to bottom, #507d99, #96cceb);
+    -webkit-border-radius: 28;
+    -moz-border-radius: 28;
+    border-radius: 28px;
+    font-family: Georgia;
+    color: #ffffff;
+    font-size: 18px;
+    padding: 5px 5px 5px 5px;
+    border: solid #8c711f 3px;
+    margin-right: 10px;
+    text-decoration: none;
+}
+.container > form > .zone_recherche > .article > .bouton:hover,
+.container > .zone_admin > .admin > .bouton:hover{
+    background: #c7dced;
+    background-image: -webkit-linear-gradient(top, #c7dced, #6f8491);
+    background-image: -moz-linear-gradient(top, #c7dced, #6f8491);
+    background-image: -ms-linear-gradient(top, #c7dced, #6f8491);
+    background-image: -o-linear-gradient(top, #c7dced, #6f8491);
+    background-image: linear-gradient(to bottom, #c7dced, #6f8491);
+    cursor: pointer;
 }

@@ -34,34 +34,27 @@ class Database:
 
         return ensemble
 
+    def get_articles_trouvees(self, texte):
+        cursor = self.get_connection().cursor()
+        select = "select titre, date_publication, identifiant "
+        fromm = "from article "
+        where = "where titre like ? or paragraphe like ? "
+        order_by = "order by titre"
+        sql = select + fromm + where + order_by
+        texte = "%" + texte + "%"
+        cursor.execute(sql, (texte, texte))
+        result = cursor.fetchall()
+        ensemble = {}  # L'ensemble des articles jusqu'à un max de 5 des plus récents
+        if result is not None:
+            for un_article_trouvee in result:
+                sous_ensemble = {'Titre': un_article_trouvee[0], 'Date de publication': un_article_trouvee[1],
+                                 'Identifiant': un_article_trouvee[2]}
+                ensemble[un_article_trouvee[2]] = sous_ensemble
+
+        return ensemble
+
     def create_user(self, username, email, salt, hashed_password):
         connection = self.get_connection()
         connection.execute("insert into users(utilisateur, email, salt, hash) values(?, ?, ?, ?)",
                            (username, email, salt, hashed_password))
         connection.commit()
-
-    # Méthode pour vérifier que utilisateur existe ou pas, lors de la tentative d'enregistrement d'un utilisateur
-    def verify_user_exist(self, liste_validation, username, email):
-        cursor = self.get_connection().cursor()
-        cursor.execute("select utilisateur, email from users where utilisateur=? OR email=?", (username, email,))
-
-        result = cursor.fetchall()
-        if result is not None:
-            for one_result in result:
-                if one_result[0] == username:
-                    liste_validation['user_existant'] = True
-
-                if one_result[1] == email:
-                    liste_validation['email_existant'] = True
-
-        return liste_validation
-
-    # On vérifie que le user a saisie le bon password
-    def get_user_login_info(self, username):
-        cursor = self.get_connection().cursor()
-        cursor.execute("select salt, hash from users where utilisateur=?", (username,))
-        result = cursor.fetchone()
-        if result is None:
-            return None
-        else:
-            return result[0], result[1]
