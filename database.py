@@ -47,8 +47,7 @@ class Database:
         ensemble = {}  # L'ensemble des articles jusqu'à un max de 5 des plus récents
         if result is not None:
             for un_article_trouvee in result:
-                sous_ensemble = {'Titre': un_article_trouvee[0], 'Date de publication': un_article_trouvee[1],
-                                 'Identifiant': un_article_trouvee[2]}
+                sous_ensemble = {'Titre': un_article_trouvee[0], 'Date de publication': un_article_trouvee[1]}
                 ensemble[un_article_trouvee[2]] = sous_ensemble
 
         return ensemble

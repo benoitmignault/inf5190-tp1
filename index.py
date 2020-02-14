@@ -4,6 +4,7 @@ from .function import *
 
 app = Flask(__name__, static_url_path='', static_folder='static')
 
+# Déclaration de la secret key pour me permettre utiliser les variables de sessions
 app.secret_key = "(*&*&322387he738220)(*(*22347657"
 
 
@@ -68,7 +69,7 @@ def recherche_article():
             url_for('.recherche_article_trouve'))
 
 
-@app.route('/recherche_article_trouve/')
+@app.route('/recherche_article_trouve/', methods=["GET"])
 def recherche_article_trouve():
     titre = session['titre']
     ensemble_trouve = session['ensemble_trouve']
