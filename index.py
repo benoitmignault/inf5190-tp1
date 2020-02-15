@@ -86,7 +86,6 @@ def article_selectionner(identifiant):
     conn_db = get_db()
     ensemble_trouve = conn_db.get_articles_selectionner(identifiant)
 
-    print(len(ensemble_trouve))
     if len(ensemble_trouve) > 0:
         return render_template("article_selectionner.html", titre="Information sur l'article",
                                ensemble_trouve=ensemble_trouve)
@@ -96,4 +95,4 @@ def article_selectionner(identifiant):
 
 @app.route('/page_inexistante', methods=["GET"])
 def page_inexistante():
-    return render_template("erreur_404.html", titre="Page inexistante - 404"), 404
+    return render_template("erreur_404.html", titre="Page inexistante - 404", erreur_404=True), 404

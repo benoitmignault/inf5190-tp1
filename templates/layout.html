@@ -6,11 +6,16 @@
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <meta content="Gestion d'une Bibliotheque" name="description">
     
-    
+    {% if not erreur_404 %}
     <!-- «Réutilisation permise» -->
     <!-- https://pixabay.com/fr/illustrations/livres-ic%C3%B4ne-ic%C3%B4ne-de-livre-symbole-1673578/  -->
     <link href="/img/icone-web.png" rel="shortcut icon">
-    <link href="/css/admin.css" rel="stylesheet" type="text/css">
+    {% else %}
+    <!-- «Réutilisation permise» -->
+    <!-- Fichier 404-notfound.jpg est une propriété du site https://www.flickr.com/photos/guspim/2280690094/ sous licence libre -->
+    <link href="/img/icone404.jpg" rel="shortcut icon">
+    {% endif %}
+    <link href="/css/biblio.css" rel="stylesheet" type="text/css">
     
     {% if titre %}
     <title>Biblio - {{ titre }}</title>

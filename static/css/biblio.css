@@ -50,7 +50,9 @@ h2 {
 
 .container > form > .zone_recherche,
 .container > .zone_admin,
-.container > .zone_article_recent {
+.container > .zone_article_recent,
+.container > .zone_404,
+.container > .erreur_404{
     width: 100%;
     background-color: #c8c8c8;
     display: -webkit-flex;
@@ -61,6 +63,18 @@ h2 {
     border-radius: 10px;
     justify-content: center;
     align-items: center;
+}
+.container > .zone_404{
+    width: auto;
+    margin: auto;
+    margin-bottom: 15px;
+}
+
+.container > .erreur_404{
+    margin-bottom: 0px;
+}
+.container .erreur_404 img{
+    width: 100%;
 }
 
 .container > form > .zone_recherche > .article > input{
@@ -117,7 +131,8 @@ h2 {
 
 .container > form > .zone_recherche > .article > .bouton,
 .container > .zone_admin > .admin > .bouton,
-.container > .zone_article_recent > .tabeau_article > tbody > tr > .valeur > .bouton{
+.container > .zone_article_recent > .tabeau_article > tbody > tr > .valeur > .bouton,
+.container > .zone_404 > .admin > .bouton_404{
     background: #507d99;
     background-image: -webkit-linear-gradient(top, #507d99, #96cceb);
     background-image: -moz-linear-gradient(top, #507d99, #96cceb);
@@ -135,9 +150,11 @@ h2 {
     margin-right: 10px;
     text-decoration: none;
 }
+.container > .zone_404 > .admin > .bouton_404{
+    margin-right: 0px;
+}
 
-
-
+.container > .zone_404 > .admin > .bouton_404:hover,
 .container > form > .zone_recherche > .article > .bouton:hover,
 .container > .zone_admin > .admin > .bouton:hover,
 .container > .zone_article_recent > .tabeau_article > tbody > tr > .valeur > .bouton:hover{
