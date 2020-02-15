@@ -11,13 +11,14 @@ def get_db():
 
 
 def initial_champ():
-    liste_champs = {"nb_article_recent": 0, "nb_article_trouve": 0, "recher_article": "", "message": []}
+    liste_champs = {"nb_article": 0, "nb_article_recent": 0, "nb_article_trouve": 0, "recher_article": "",
+                    "message": []}
 
     return liste_champs
 
 
 def initial_champ_validation():
-    liste_validation = {"aucun_article_recent": False, "champ_recher_article_vide": False,
+    liste_validation = {"aucun_article": False, "aucun_article_recent": False, "champ_recher_article_vide": False,
                         "aucun_article_trouve": False,
                         "situation_erreur": False}
 
@@ -46,14 +47,17 @@ def situation_erreur(liste_validation):
 
 
 def message_erreur(liste_validation):
-    messages = []
+    messages = {}
     if liste_validation["champ_recher_article_vide"]:
-        messages.append("Le champ ne peut rester vide si vous voulez faire une recherche !")
+        messages['champ_vide'] = "Le champ ne peut rester vide si vous voulez faire une recherche !"
 
     if liste_validation["aucun_article_trouve"]:
-        messages.append("Le texte utilisé pour la recherche n'a donné aucun article trouvé !")
+        messages['zero_article_trouve'] = "Le texte utilisé pour la recherche n'a donné aucun article trouvé !"
 
     if liste_validation["aucun_article_recent"]:
-        messages.append("Aucun article est en date du jour dans l'inventaire !")
+        messages['zero_article_recent'] = "Aucun article est en date du jour dans l'inventaire !"
+
+    if liste_validation["aucun_article"]:
+        messages['aucun_article'] = "Aucun article a été enregistré dans l'inventaire !"
 
     return messages

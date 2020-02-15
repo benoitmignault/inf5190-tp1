@@ -17,9 +17,10 @@ def close_connection(exception):
 
 @app.route('/', methods=["GET"])
 def home():
-    #####################
-    # Vérifier si la route vient d'une X route si oui on garde les cookies sinon, on les kill
-    #####################
+    # Si indicateur est vrai, on détruit les cookies, sinon on fait rien de spécial
+    if session.get('reset_cookie'):
+        if session['reset_cookie']:
+            session.clear()
 
     # Initialisation peu importe s'il y a des variabes sessions
     liste_champs = initial_champ()  # Création de la liste d'information nécessaire
@@ -33,11 +34,14 @@ def home():
     else:
         titre = "Présentation"
 
+    # On doit valider si j'ai cette indicateur à True
+    if session.get('aucun_article_trouve'):
+        liste_validation['aucun_article_trouve'] = True
+
     # On poursuit pour vérifier s'il y avait un ensemble qu'on avait préalablement récupérer
     if session.get('ensemble_recent'):
         # Et si on a un ensemble trouvé, ce qui veut dire que nous n'avons pas trouvé article
         ensemble_recent = session['ensemble_recent']
-        liste_validation['aucun_article_trouve'] = True
     else:
         ensemble_recent = conn_db.get_articles_recents()
 
@@ -50,7 +54,7 @@ def home():
     liste_champs['messages'] = message_erreur(liste_validation)
 
     return render_template('home.html', titre=titre, liste_validation=liste_validation,
-                           ensemble_recent=ensemble_recent, liste_champs=liste_champs, erreur_404=False)
+                           ensemble_recent=ensemble_recent, liste_champs=liste_champs)
 
 
 @app.route('/recherche', methods=["POST"])
@@ -73,6 +77,7 @@ def recherche_article():
         ensemble_recent = conn_db.get_articles_recents()
         session['titre'] = "Problème avec la recherche !"
         session['ensemble_recent'] = ensemble_recent
+        session['aucun_article_trouve'] = liste_validation['aucun_article_trouve']
 
         return redirect(url_for('.home'))
 
@@ -91,20 +96,22 @@ def recherche_article_trouve():
     titre = session['titre']
     ensemble_trouve = session['ensemble_trouve']
     liste_champs = session['liste_champs']
-
+    # Ceci est un indicateur pour détruire les cookies
+    # Pour éviter d'avoir de vieux message erreur dans la page accueil
+    session['reset_cookie'] = True
     return render_template("recherche_trouve.html", titre=titre, ensemble_trouve=ensemble_trouve,
-                           liste_champs=liste_champs, erreur_404=False)
+                           liste_champs=liste_champs)
 
 
 @app.route('/article/<identifiant>')
 def article_selectionner(identifiant):
     conn_db = get_db()
     ensemble_trouve = conn_db.get_articles_selectionner(identifiant)
-    session.clear()  # Rendu ici, je dois killer mes cookies car j'en ai plus besoin !
+    session['reset_cookie'] = True  # Si nous revenons à la page d'accueil par cette route, on détruit les cookies
 
     if len(ensemble_trouve) > 0:
         return render_template("article_selectionner.html", titre="Information sur l'article",
-                               ensemble_trouve=ensemble_trouve, erreur_404=False)
+                               ensemble_trouve=ensemble_trouve)
     else:
         return redirect(url_for('.page_inexistante'))
 
@@ -113,3 +120,21 @@ def article_selectionner(identifiant):
 def page_inexistante():
     session.clear()  # Rendu ici, je dois killer mes cookies car j'en ai plus besoin !
     return render_template("erreur_404.html", titre="Page inexistante - 404", erreur_404=True), 404
+
+
+@app.route('/admin', methods=["GET"])
+def admin():
+    liste_champs = initial_champ()  # Création de la liste d'information nécessaire
+    liste_validation = initial_champ_validation()  # Création des indicateurs erreurs
+    conn_db = get_db()
+    ensembles = conn_db.get_all_articles()
+    liste_champs['nb_article'] = len(ensembles)
+    if liste_champs['nb_article'] == 0:
+        liste_validation['aucun_article'] = True
+
+    liste_validation = situation_erreur(liste_validation)
+    liste_champs['messages'] = message_erreur(liste_validation)
+    session['reset_cookie'] = True  # Si nous revenons à la page d'accueil par cette route, on détruit les cookies
+
+    return render_template("admin.html", titre="Admin", ensembles=ensembles, liste_champs=liste_champs,
+                           liste_validation=liste_validation)

@@ -15,6 +15,7 @@ class Database:
         if self.connection is not None:
             self.connection.close()
 
+    # Sera utiliser avec la route /
     def get_articles_recents(self):
         date_auj = date.today()
         cursor = self.get_connection().cursor()
@@ -34,6 +35,7 @@ class Database:
 
         return ensemble
 
+    # Sera utiliser avec la route /recherche
     def get_articles_trouvees(self, texte):
         cursor = self.get_connection().cursor()
         select = "select titre, date_publication, identifiant "
@@ -52,6 +54,7 @@ class Database:
 
         return ensemble_trouve
 
+    # Sera utiliser avec la route /article/<identifiant»
     def get_articles_selectionner(self, identifiant):
         cursor = self.get_connection().cursor()
         select = "select titre, date_publication, identifiant, auteur, paragraphe "
@@ -68,6 +71,23 @@ class Database:
                                'Paragraphe': result[4]}
 
         return ensemble_trouve
+
+    # Sera utiliser avec la route /admin
+    def get_all_articles(self):
+        cursor = self.get_connection().cursor()
+        select = "select titre, date_publication, identifiant "
+        fromm = "from article "
+        order_by = "order by titre"
+        sql = select + fromm + order_by
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        ensemble = {}  # L'ensemble des articles jusqu'à un max de 5 des plus récents
+        if result is not None:
+            for un_article_trouvee in result:
+                sous_ensemble = {'Titre': un_article_trouvee[0], 'Date de publication': un_article_trouvee[1]}
+                ensemble[un_article_trouvee[2]] = sous_ensemble
+
+        return ensemble
 
     def create_user(self, username, email, salt, hashed_password):
         connection = self.get_connection()

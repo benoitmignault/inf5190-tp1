@@ -1,34 +1,33 @@
 {% extends "layout.html" %}
 {% block content %}
-<h1>Voici le résultat de votre recherche avec le texte &rarr;
-    <span class='info_important'>{{liste_champs['recher_article']}}</span> &larr;</h1>
+<h1>Bienvenue à vous ! Administrateur de l'inventaire</h1>
 <div class="container">
-    {% if liste_champs['nb_article_trouve'] > 1 %}
-    <h2>Section des <span>{{liste_champs['nb_article_trouve']}}</span> articles trouvés lors de la recherche</h2>
+    {% if liste_validation['aucun_article'] %}
+    <p class="aucun">{{liste_champs['messages']['aucun_article']}}</p>
     {% else %}
-    <h2>Section de l'article trouvé lors de la recherche</h2>
+    {% if liste_champs['nb_article'] > 1 %}
+    <h2>Section des <span>{{liste_champs['nb_article']}}</span> articles se trouvant dans la bibliothèque</h2>
+    {% elif liste_champs['nb_article'] == 1 %}
+    <h2>Section de l'article se trouvant dans la bibliothèque</h2>
     {% endif %}
-    {% for cle1, valeur1 in ensemble_trouve.items() %}
+    {% for cle1, valeur1 in ensembles.items() %}
     <div class='zone_article_recent'>
         <table class="tabeau_article">
             <tbody>
                 {% for cle2, valeur2 in valeur1.items() %}
-                {% if cle2 == 'Date de publication' %}
                 <tr>
                     <td class="cle">{{cle2}} :</td>
                     <td class="valeur">{{valeur2}}</td>
                 </tr>
-                {% else %}
-                <tr>
-                    <td class="cle">{{cle2}} :</td>
-                    <td class="valeur"><a class="bouton" href="/article/{{cle1}}">{{valeur2}}</a></td>
-                </tr>
-                {% endif %}
                 {% endfor %}
             </tbody>
         </table>
+        <div class="admin_modif">
+            <a class="bouton" href="/admin-modif/{{cle1}}">Modification</a>
+        </div>
     </div>
     {% endfor %}
+    {% endif %}
     <h2>Section pour tous</h2>
     <div class='zone_admin'>
         <div class="admin">
@@ -38,9 +37,9 @@
     <h2>Section pour l'administrateur du site</h2>
     <div class='zone_admin'>
         <div class="admin">
-            <a class="bouton" href="/admin">Afficher tous les articles</a>
             <a class="bouton" href="/admin-nouveau">Ajouter un nouvel article</a>
         </div>
     </div>
 </div>
 {% endblock content %}
+

@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-<h1>Bienvenue à la page accueil du site de gestion des inventaires</h1>
+<h1>Bienvenue sur le site de la bibliothèque</h1>
 <div class="container">
     <h2>Section pour rechercher un article dans l'inventaire</h2>
     <form action="./recherche" method="post">
@@ -15,17 +15,13 @@
                 <input class="bouton" type="reset" value="Effacer...">
             </div>
             {% if liste_validation['aucun_article_trouve'] %}
-            {% for un_message in liste_champs['messages'] %}
-            <p class="aucun">{{un_message}}</p>
-            {% endfor %}
+            <p class="aucun">{{liste_champs['messages']['zero_article_trouve']}}</p>
             {% endif %}
         </div>
         
     </form>
     {% if liste_validation['aucun_article_recent'] %}
-    {% for un_message in liste_champs['messages'] %}
-    <p class="aucun">{{un_message}}</p>
-    {% endfor %}
+    <p class="aucun">{{liste_champs['messages']['zero_article_recent']}}</p>
     {% else %}
     <h2>Section des <span>{{liste_champs['nb_article_recent']}}</span> articles les plus récents</h2>
     {% for cle1, valeur1 in ensemble_recent.items() %}

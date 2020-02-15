@@ -26,6 +26,9 @@ h1 {
 h2,h1 {
     text-align: center;
 }
+h1 > .info_important{
+    color: red;
+}
 
 h2 {
     margin-top: 5px;
@@ -102,6 +105,9 @@ h2 {
     color:green;
     font-weight: bold;
 }
+.container > .zone_article_recent > .admin_modif{
+    margin-top: 15px;
+}
 
 .container > .zone_article_recent > .tabeau_article{
     width: 100%;
@@ -129,6 +135,7 @@ h2 {
     margin-bottom: 0px;
 }
 
+.container > .zone_article_recent > .admin_modif > .bouton,
 .container > form > .zone_recherche > .article > .bouton,
 .container > .zone_admin > .admin > .bouton,
 .container > .zone_article_recent > .tabeau_article > tbody > tr > .valeur > .bouton,
@@ -154,6 +161,7 @@ h2 {
     margin-right: 0px;
 }
 
+.container > .zone_article_recent > .admin_modif > .bouton:hover,
 .container > .zone_404 > .admin > .bouton_404:hover,
 .container > form > .zone_recherche > .article > .bouton:hover,
 .container > .zone_admin > .admin > .bouton:hover,
