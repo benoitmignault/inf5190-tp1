@@ -62,6 +62,8 @@ def recherche_article():
         return render_template("home.html", titre="Problème avec la recherche", ensemble_recent=ensemble_recent,
                                liste_validation=liste_validation, liste_champs=liste_champs)
     else:
+        # Utilisation des variables de sessions pour transporter
+        # les données nécessaire dans le traitement de la route /recherche_article_trouve
         session['titre'] = "Recherche réussi !"
         session['ensemble_trouve'] = ensemble_trouve
         session['liste_champs'] = liste_champs
@@ -69,10 +71,29 @@ def recherche_article():
             url_for('.recherche_article_trouve'))
 
 
-@app.route('/recherche_article_trouve/', methods=["GET"])
+@app.route('/recherche_article_trouve', methods=["GET"])
 def recherche_article_trouve():
+    # On récupère ici les informations sauvegardées dans les sessions de variables
     titre = session['titre']
     ensemble_trouve = session['ensemble_trouve']
     liste_champs = session['liste_champs']
     return render_template("recherche_trouve.html", titre=titre, ensemble_trouve=ensemble_trouve,
                            liste_champs=liste_champs)
+
+
+@app.route('/article/<identifiant>', methods=["GET"])
+def article_selectionner(identifiant):
+    conn_db = get_db()
+    ensemble_trouve = conn_db.get_articles_selectionner(identifiant)
+
+    print(len(ensemble_trouve))
+    if len(ensemble_trouve) > 0:
+        return render_template("article_selectionner.html", titre="Information sur l'article",
+                               ensemble_trouve=ensemble_trouve)
+    else:
+        return redirect(url_for('.page_inexistante'))
+
+
+@app.route('/page_inexistante', methods=["GET"])
+def page_inexistante():
+    return render_template("erreur_404.html", titre="Page inexistante - 404"), 404

@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Bienvenue sur la page de l'article sélectionné</h1>
+<div class="container">
+    <h2>Section concernant l'information de l'article en question</h2>
+    <div class='zone_article_recent'>
+        <table class="tabeau_article">
+            <tbody>
+                {% for cle, valeur in ensemble_trouve.items() %}
+                <tr>
+                    <td class="cle">{{cle}} :</td>
+                    <td class="valeur">{{valeur}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <h2>Section pour tous</h2>
+    <div class='zone_admin'>
+        <div class="admin">
+            <a class="bouton" href="/">Page D'accueil</a>
+        </div>
+    </div>
+    <h2>Section pour l'administrateur du site</h2>
+    <div class='zone_admin'>
+        <div class="admin">
+            <a class="bouton" href="/admin">Afficher tous les articles</a>
+            <a class="bouton" href="/admin-nouveau">Ajouter un nouvel article</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}
