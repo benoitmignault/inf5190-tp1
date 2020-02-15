@@ -17,21 +17,40 @@ def close_connection(exception):
 
 @app.route('/', methods=["GET"])
 def home():
+    #####################
+    # Vérifier si la route vient d'une X route si oui on garde les cookies sinon, on les kill
+    #####################
+
+    # Initialisation peu importe s'il y a des variabes sessions
     liste_champs = initial_champ()  # Création de la liste d'information nécessaire
     liste_validation = initial_champ_validation()  # Création des indicateurs erreurs
     conn_db = get_db()
 
-    # Les quatre lignes suivantes pourrait être mise dans une fonction plutard
-    ensemble_recent = conn_db.get_articles_recents()
+    # On vérifi s'il y avait des variables de type session qui aurait été crée part une recherche d'article introuvable
+    # On commence par le titre
+    if session.get('titre'):
+        titre = session['titre']
+    else:
+        titre = "Présentation"
+
+    # On poursuit pour vérifier s'il y avait un ensemble qu'on avait préalablement récupérer
+    if session.get('ensemble_recent'):
+        # Et si on a un ensemble trouvé, ce qui veut dire que nous n'avons pas trouvé article
+        ensemble_recent = session['ensemble_recent']
+        liste_validation['aucun_article_trouve'] = True
+    else:
+        ensemble_recent = conn_db.get_articles_recents()
+
+    # On peut maintenant calculer le nombre d'articles récents trouvé peu importe d'où vient l'ensemble récent
     liste_champs['nb_article_recent'] = len(ensemble_recent)
     if liste_champs['nb_article_recent'] == 0:
         liste_validation['aucun_article_recent'] = True
-    # Fin du bloque des 4 lignes
 
     liste_validation = situation_erreur(liste_validation)
     liste_champs['messages'] = message_erreur(liste_validation)
-    return render_template('home.html', titre="Présentation", liste_validation=liste_validation,
-                           ensemble_recent=ensemble_recent, liste_champs=liste_champs)
+
+    return render_template('home.html', titre=titre, liste_validation=liste_validation,
+                           ensemble_recent=ensemble_recent, liste_champs=liste_champs, erreur_404=False)
 
 
 @app.route('/recherche', methods=["POST"])
@@ -51,24 +70,19 @@ def recherche_article():
 
     liste_validation = situation_erreur(liste_validation)
     if liste_validation['situation_erreur']:
-        # Les quatre lignes suivantes pourrait être mise dans une fonction plutard
         ensemble_recent = conn_db.get_articles_recents()
-        liste_champs['nb_article_recent'] = len(ensemble_recent)
-        if liste_champs['nb_article_recent'] == 0:
-            liste_validation['aucun_article_recent'] = True
-        # Fin du bloque des 4 lignes
+        session['titre'] = "Problème avec la recherche !"
+        session['ensemble_recent'] = ensemble_recent
 
-        liste_champs['messages'] = message_erreur(liste_validation)
-        return render_template("home.html", titre="Problème avec la recherche", ensemble_recent=ensemble_recent,
-                               liste_validation=liste_validation, liste_champs=liste_champs)
+        return redirect(url_for('.home'))
+
     else:
         # Utilisation des variables de sessions pour transporter
         # les données nécessaire dans le traitement de la route /recherche_article_trouve
         session['titre'] = "Recherche réussi !"
         session['ensemble_trouve'] = ensemble_trouve
         session['liste_champs'] = liste_champs
-        return redirect(
-            url_for('.recherche_article_trouve'))
+        return redirect(url_for('.recherche_article_trouve'))
 
 
 @app.route('/recherche_article_trouve', methods=["GET"])
@@ -77,22 +91,25 @@ def recherche_article_trouve():
     titre = session['titre']
     ensemble_trouve = session['ensemble_trouve']
     liste_champs = session['liste_champs']
+
     return render_template("recherche_trouve.html", titre=titre, ensemble_trouve=ensemble_trouve,
-                           liste_champs=liste_champs)
+                           liste_champs=liste_champs, erreur_404=False)
 
 
-@app.route('/article/<identifiant>', methods=["GET"])
+@app.route('/article/<identifiant>')
 def article_selectionner(identifiant):
     conn_db = get_db()
     ensemble_trouve = conn_db.get_articles_selectionner(identifiant)
+    session.clear()  # Rendu ici, je dois killer mes cookies car j'en ai plus besoin !
 
     if len(ensemble_trouve) > 0:
         return render_template("article_selectionner.html", titre="Information sur l'article",
-                               ensemble_trouve=ensemble_trouve)
+                               ensemble_trouve=ensemble_trouve, erreur_404=False)
     else:
         return redirect(url_for('.page_inexistante'))
 
 
 @app.route('/page_inexistante', methods=["GET"])
 def page_inexistante():
+    session.clear()  # Rendu ici, je dois killer mes cookies car j'en ai plus besoin !
     return render_template("erreur_404.html", titre="Page inexistante - 404", erreur_404=True), 404
