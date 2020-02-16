@@ -78,7 +78,6 @@ def recherche_article():
         session['titre'] = "Problème avec la recherche !"
         session['ensemble_recent'] = ensemble_recent
         session['aucun_article_trouve'] = liste_validation['aucun_article_trouve']
-
         return redirect(url_for('.home'))
 
     else:
@@ -116,18 +115,6 @@ def article_selectionner(identifiant):
         return redirect(url_for('.article_inexistante'))
 
 
-@app.route('/article/')
-def article_inexistante():
-    session.clear()  # Rendu ici, je dois killer mes cookies car j'en ai plus besoin !
-    return render_template("erreur_404.html", titre="Page inexistante - 404", erreur_404=True), 404
-
-
-@app.route('/admin-modif/')
-def admin_modif_inexistant():
-    session.clear()  # Rendu ici, je dois killer mes cookies car j'en ai plus besoin !
-    return render_template("erreur_404.html", titre="Page inexistante - 404", erreur_404=True), 404
-
-
 @app.route('/admin', methods=["GET"])
 def admin():
     liste_champs = initial_champ()  # Création de la liste d'information nécessaire
@@ -144,3 +131,35 @@ def admin():
 
     return render_template("admin.html", titre="Admin", ensembles=ensembles, liste_champs=liste_champs,
                            liste_validation=liste_validation)
+
+
+@app.route('/admin-modif/<identifiant>', methods=["GET"])
+def admin_modif_article(identifiant):
+    conn_db = get_db()
+    ensemble_trouve = conn_db.get_articles_selectionner(identifiant)
+
+    if len(ensemble_trouve) > 0:
+        liste_champs = initial_champ()  # Création de la liste d'information nécessaire
+        # Cette fonction aura pour but d'associer les informations de l'article en cours de modification
+        liste_champs = remplissage_article(liste_champs, ensemble_trouve)
+        return render_template("admin_modif_selectionner.html", titre="Modification en cours",
+                               liste_champs=liste_champs)
+    else:
+        return redirect(url_for('.admin_modif_inexistant'))
+
+
+@app.route('/article_modification', methods=["POST"])
+def admin_modification_article_en_cours():
+    pass
+
+
+@app.route('/article/')
+def article_inexistante():
+    session.clear()  # Rendu ici, je dois killer mes cookies car j'en ai plus besoin !
+    return render_template("erreur_404.html", titre="Page inexistante - 404", erreur_404=True), 404
+
+
+@app.route('/admin-modif/')
+def admin_modif_inexistant():
+    session.clear()  # Rendu ici, je dois killer mes cookies car j'en ai plus besoin !
+    return render_template("erreur_404.html", titre="Page inexistante - 404", erreur_404=True), 404

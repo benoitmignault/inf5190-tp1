@@ -84,6 +84,8 @@ h2 {
     text-align:center;
 }
 
+.container > .zone_article_recent > form > div > div > div > textarea,
+.container > .zone_article_recent > form > div > div > div > input[type=text],
 .container > form > .zone_recherche > div > input[type=search]{
     border-radius: 10px;
     padding: 5px;
@@ -109,7 +111,8 @@ h2 {
     margin-top: 15px;
 }
 
-.container > .zone_article_recent > .tabeau_article{
+.container > .zone_article_recent > .tabeau_article,
+.container > .zone_article_recent > form{
     width: 100%;
     border-radius: 10px;
     border: 2px solid black;
@@ -131,10 +134,61 @@ h2 {
     width: 70%;
 }
 
-.container > .zone_admin{
-    margin-bottom: 0px;
+
+.container > .zone_article_recent > form > div {
+    display: flex;
+    display: -webkit-flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    width: 100%;
 }
 
+.container > .zone_article_recent > form > .troisBTN {
+    -webkit-flex-direction: row;
+    flex-direction: row;
+}
+
+.container > .zone_article_recent > form > .modif {
+    width: 100%;
+    display: flex;
+    display: -webkit-flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+}
+
+.container > .zone_article_recent > form > .modif > .information {
+    width: 100%;
+    margin-bottom: 10px;
+    display: flex;
+    display: -webkit-flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+}
+
+.container > .zone_article_recent > form > .modif > .information > div {
+    width: 100%;
+    display: flex;
+    display: -webkit-flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+}
+
+.container > .zone_article_recent > form > .modif > .information > div > .obligatoire {
+    color: #FF0000;
+}
+
+.container > .zone_article_recent > form > .modif > .information > label {
+    text-align: left;
+    font-size: 18px;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.container > .zone_article_recent > form >  .modif > .information > label:hover{
+    cursor: pointer;
+}
+
+.container > .zone_article_recent > form > .troisBTN > .bouton,
 .container > .zone_article_recent > .admin_modif > .bouton,
 .container > form > .zone_recherche > .article > .bouton,
 .container > .zone_admin > .admin > .bouton,
@@ -161,6 +215,7 @@ h2 {
     margin-right: 0px;
 }
 
+.container > .zone_article_recent > form > .troisBTN > .bouton:hover,
 .container > .zone_article_recent > .admin_modif > .bouton:hover,
 .container > .zone_404 > .admin > .bouton_404:hover,
 .container > form > .zone_recherche > .article > .bouton:hover,

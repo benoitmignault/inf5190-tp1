@@ -69,7 +69,7 @@ Nouvelle manière d'afficher un legend au milieu
     width: 100%;
 }
 
-.content > .center > fieldset > form > .connexion {
+.content > .center > fieldset > form > .modif {
     width: 55%;
     margin: auto;
     display: flex;
@@ -78,7 +78,7 @@ Nouvelle manière d'afficher un legend au milieu
     flex-direction: column;
 }
 
-.content > .center > fieldset > form > .connexion > .information {
+.content > .center > fieldset > form > .modif > .information {
     width: 100%;
     margin-top: 10px;
     display: flex;
@@ -87,7 +87,7 @@ Nouvelle manière d'afficher un legend au milieu
     flex-direction: column;
 }
 
-.content > .center > fieldset > form > .connexion > .information > div {
+.content > .center > fieldset > form > .modif > .information > div {
     width: 100%;
     display: flex;
     display: -webkit-flex;
@@ -95,15 +95,15 @@ Nouvelle manière d'afficher un legend au milieu
     flex-direction: row;
 }
 
-.content > .center > fieldset > form > .connexion > .information > div > input {
+.content > .center > fieldset > form > .modif > .information > div > input {
     width: 100%;
 }
 
-.content > .center > fieldset > form > .connexion > .information > div > .obligatoire {
+.content > .center > fieldset > form > .modif > .information > div > .obligatoire {
     color: #FF0000;
 }
 
-.content > .center > fieldset > form > .connexion > .information > label {
+.content > .center > fieldset > form > .modif > .information > label {
     text-align: left;
     font-size: 18px;
     font-weight: bold;

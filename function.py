@@ -12,7 +12,8 @@ def get_db():
 
 def initial_champ():
     liste_champs = {"nb_article": 0, "nb_article_recent": 0, "nb_article_trouve": 0, "recher_article": "",
-                    "message": []}
+                    "message": [], "titre": "", "paragraphe": "", "identifiant": "", "date_publication": "",
+                    "auteur": ""}
 
     return liste_champs
 
@@ -27,6 +28,16 @@ def initial_champ_validation():
 
 def remplissage_champs(formulaire, liste_champs):
     liste_champs['recher_article'] = formulaire['recher_article']
+
+    return liste_champs
+
+
+def remplissage_article(liste_champs, ensemble_trouve):
+    liste_champs['titre'] = ensemble_trouve['Titre']
+    liste_champs['paragraphe'] = ensemble_trouve['Paragraphe']
+    liste_champs['identifiant'] = ensemble_trouve['Identifiant']
+    liste_champs['date_publication'] = ensemble_trouve['Date de publication']
+    liste_champs['auteur'] = ensemble_trouve['auteur']
 
     return liste_champs
 
