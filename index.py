@@ -113,11 +113,17 @@ def article_selectionner(identifiant):
         return render_template("article_selectionner.html", titre="Information sur l'article",
                                ensemble_trouve=ensemble_trouve)
     else:
-        return redirect(url_for('.page_inexistante'))
+        return redirect(url_for('.article_inexistante'))
 
 
-@app.route('/page_inexistante', methods=["GET"])
-def page_inexistante():
+@app.route('/article/')
+def article_inexistante():
+    session.clear()  # Rendu ici, je dois killer mes cookies car j'en ai plus besoin !
+    return render_template("erreur_404.html", titre="Page inexistante - 404", erreur_404=True), 404
+
+
+@app.route('/admin-modif/')
+def admin_modif_inexistant():
     session.clear()  # Rendu ici, je dois killer mes cookies car j'en ai plus besoin !
     return render_template("erreur_404.html", titre="Page inexistante - 404", erreur_404=True), 404
 
