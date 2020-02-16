@@ -117,6 +117,7 @@ def article_selectionner(identifiant):
 
 @app.route('/admin', methods=["GET"])
 def admin():
+    session.clear()  # On delete les cookies pour éviter d'aller consulter le mauvais article
     liste_champs = initial_champ()  # Création de la liste d'information nécessaire
     liste_validation = initial_champ_validation()  # Création des indicateurs erreurs
     conn_db = get_db()
@@ -127,7 +128,6 @@ def admin():
 
     liste_validation = situation_erreur(liste_validation)
     liste_champs['messages'] = message_erreur(liste_validation)
-    session['reset_cookie'] = True  # Si nous revenons à la page d'accueil par cette route, on détruit les cookies
 
     return render_template("admin.html", titre="Admin", ensembles=ensembles, liste_champs=liste_champs,
                            liste_validation=liste_validation)
@@ -135,22 +135,74 @@ def admin():
 
 @app.route('/admin-modif/<identifiant>', methods=["GET"])
 def admin_modif_article(identifiant):
+    # On doit toujours revalider si l'identifiant est toujours valide avant de poursuivre
     conn_db = get_db()
-    ensemble_trouve = conn_db.get_articles_selectionner(identifiant)
+    article_a_modifier = conn_db.get_articles_selectionner(identifiant)
+    if len(article_a_modifier) > 0:
+        validation_erreur = False  # Ça nous indiquera quels types de messages afficher
+        titre = ""
 
-    if len(ensemble_trouve) > 0:
-        liste_champs = initial_champ()  # Création de la liste d'information nécessaire
-        # Cette fonction aura pour but d'associer les informations de l'article en cours de modification
-        liste_champs = remplissage_article(liste_champs, ensemble_trouve)
-        return render_template("admin_modif_selectionner.html", titre="Modification en cours",
-                               liste_champs=liste_champs)
+        if session.get('situation_erreur') or session.get('modification_reussi'):
+            article_a_modifier = session['liste_champs_admin']
+            liste_validation_admin = session['liste_validation_admin']
+
+            if session.get('situation_erreur') and session['situation_erreur']:
+                titre = "Modification en Erreur !"
+                validation_erreur = True
+
+            if session.get('modification_reussi') and session['modification_reussi']:
+                titre = "Modification réussi !"
+
+            # print(article_a_modifier)
+            return render_template("admin_modif_selectionner.html", titre=titre, article_a_modifier=article_a_modifier,
+                                   liste_validation_admin=liste_validation_admin,
+                                   validation_erreur=validation_erreur)
+        # Ce qui veut dire on arrive pour la première sur cette route
+        else:
+
+            liste_validation_admin = initial_champ_validation_admin()
+            titre = "Modification en cours"
+            return render_template("admin_modif_selectionner.html", titre=titre, article_a_modifier=article_a_modifier,
+                                   liste_validation_admin=liste_validation_admin,
+                                   validation_erreur=validation_erreur)
+
     else:
         return redirect(url_for('.admin_modif_inexistant'))
 
 
-@app.route('/article_modification', methods=["POST"])
+@app.route('/admin-modif/article_modification', methods=["POST"])
 def admin_modification_article_en_cours():
-    pass
+    liste_champs_admin = initial_champ_admin()  # Création de la liste d'information nécessaire
+    liste_validation_admin = initial_champ_validation_admin()
+    # On utilise la fonction pour les besoin de l'administrateur
+    liste_champs_admin = remplissage_champs_admin(request, liste_champs_admin)
+    liste_validation_admin = validation_champs_admin(liste_champs_admin, liste_validation_admin)
+    liste_validation_admin = situation_erreur(liste_validation_admin)
+
+    if liste_validation_admin['situation_erreur'] and liste_validation_admin['aucune_modification']:
+        liste_champs_admin['messages'] = message_erreur_admin(liste_validation_admin)
+        # On doit mettre la valeur contraire
+        # sinon il va avoir un bug au niveau de la couleur des messages et du titre de la page web
+        session['situation_erreur'] = True
+        session['modification_reussi'] = False
+        session['liste_validation_admin'] = liste_validation_admin
+        session['liste_champs_admin'] = liste_champs_admin
+        return redirect(url_for('.admin_modif_article', identifiant=liste_champs_admin['identifiant']))
+
+    else:
+        conn_db = get_db()
+        conn_db.update_article(liste_champs_admin['identifiant'], liste_champs_admin['titre'],
+                               liste_champs_admin['paragraphe'])
+        liste_validation_admin['update_reussi'] = True
+        liste_champs_admin['messages'] = message_erreur_admin(liste_validation_admin)
+        # On doit mettre la valeur contraire
+        # sinon il va avoir un bug au niveau de la couleur des messages et du titre de la page web
+        session['modification_reussi'] = True
+        session['situation_erreur'] = False
+        session['liste_validation_admin'] = liste_validation_admin
+        session['liste_champs_admin'] = liste_champs_admin
+
+        return redirect(url_for('.admin_modif_article', identifiant=liste_champs_admin['identifiant']))
 
 
 @app.route('/article/')

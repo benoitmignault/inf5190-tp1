@@ -12,10 +12,17 @@ def get_db():
 
 def initial_champ():
     liste_champs = {"nb_article": 0, "nb_article_recent": 0, "nb_article_trouve": 0, "recher_article": "",
-                    "message": [], "titre": "", "paragraphe": "", "identifiant": "", "date_publication": "",
+                    "message": {}, "titre": "", "paragraphe": "", "identifiant": "", "date_publication": "",
                     "auteur": ""}
 
     return liste_champs
+
+
+def initial_champ_admin():
+    liste_champs_admin = {"titre": "", "titre_avant": "", "paragraphe": "", "paragraphe_avant": "",
+                          "identifiant": "", "date_publication": "", "auteur": ""}
+
+    return liste_champs_admin
 
 
 def initial_champ_validation():
@@ -26,20 +33,32 @@ def initial_champ_validation():
     return liste_validation
 
 
+def initial_champ_validation_admin():
+    liste_validation_admin = {"situation_erreur": False, "champ_titre_pareil": False, "champs_pareils": False,
+                              "update_reussi": False, "aucune_modification": False, "champ_paragraphe_pareil": False,
+                              "champs_vides": False, "champ_titre_vide": False, "champ_paragraphe_vide": False}
+
+    return liste_validation_admin
+
+
 def remplissage_champs(formulaire, liste_champs):
     liste_champs['recher_article'] = formulaire['recher_article']
 
     return liste_champs
 
 
-def remplissage_article(liste_champs, ensemble_trouve):
-    liste_champs['titre'] = ensemble_trouve['Titre']
-    liste_champs['paragraphe'] = ensemble_trouve['Paragraphe']
-    liste_champs['identifiant'] = ensemble_trouve['Identifiant']
-    liste_champs['date_publication'] = ensemble_trouve['Date de publication']
-    liste_champs['auteur'] = ensemble_trouve['auteur']
+def remplissage_champs_admin(request, liste_champs_admin):
+    if request.method == "POST":
+        liste_champs_admin['titre'] = request.form['nom_article']
+        liste_champs_admin['titre_avant'] = request.form['nom_article_avant']
+        # Je dois utiliser strip pour retirer les retours de lignes non nécessaire
+        liste_champs_admin['paragraphe'] = request.form['nom_paragraphe'].strip()
+        liste_champs_admin['paragraphe_avant'] = request.form['nom_paragraphe_avant']
+        liste_champs_admin['identifiant'] = request.form['identifiant']
+        liste_champs_admin['date_publication'] = request.form['date_publication']
+        liste_champs_admin['auteur'] = request.form['auteur']
 
-    return liste_champs
+    return liste_champs_admin
 
 
 def validation_champs(liste_champs, liste_validation):
@@ -49,6 +68,31 @@ def validation_champs(liste_champs, liste_validation):
     return liste_validation
 
 
+def validation_champs_admin(liste_champs_admin, liste_validation_admin):
+    if liste_champs_admin['titre'] == "":
+        liste_validation_admin['champ_titre_vide'] = True
+
+    if liste_champs_admin['paragraphe'] == "":
+        liste_validation_admin['champ_paragraphe_vide'] = True
+
+    if liste_validation_admin['champ_titre_vide'] or liste_validation_admin['champ_paragraphe_vide']:
+        liste_validation_admin['champs_vides'] = True
+
+    if not liste_validation_admin['champs_vides']:
+        # Seulement si les champs ne sont pas vide, qu'on va poursuivre les validations de manière logique
+        if liste_champs_admin['paragraphe'] == liste_champs_admin['paragraphe_avant']:
+            liste_validation_admin['champ_paragraphe_pareil'] = True
+
+        if liste_champs_admin['titre'] == liste_champs_admin['titre_avant']:
+            liste_validation_admin['champ_titre_pareil'] = True
+
+        if liste_validation_admin['champ_paragraphe_pareil'] and liste_validation_admin['champ_titre_pareil']:
+            liste_validation_admin['aucune_modification'] = True
+
+    return liste_validation_admin
+
+
+# Nous allons utiliser cette focntion pour la recherche et pour la section admin
 def situation_erreur(liste_validation):
     for cle, valeur in liste_validation.items():
         if valeur:
@@ -70,5 +114,23 @@ def message_erreur(liste_validation):
 
     if liste_validation["aucun_article"]:
         messages['aucun_article'] = "Aucun article a été enregistré dans l'inventaire !"
+
+    return messages
+
+
+def message_erreur_admin(liste_validation_admin):
+    messages = {}
+
+    if liste_validation_admin['champ_titre_vide']:
+        messages['champ_titre_vide'] = "Le nouveau titre de l'article ne peut être vide !"
+
+    if liste_validation_admin['champ_paragraphe_vide']:
+        messages['champ_paragraphe_vide'] = "Le nouveau paragraphe de l'article ne peut être vide !"
+
+    if liste_validation_admin['aucune_modification']:
+        messages['aucune_modification'] = "Vous devez modifier au moins l'un des champs suivant : Titre ou Paragraphe !"
+
+    if liste_validation_admin['update_reussi']:
+        messages['update_reussi'] = "La mise à jour de l'article a été un succès !"
 
     return messages

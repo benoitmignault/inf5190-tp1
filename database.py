@@ -66,9 +66,9 @@ class Database:
         ensemble_trouve = {}  # L'ensemble des articles jusqu'à un max de 5 des plus récents
 
         if result is not None:
-            ensemble_trouve = {'Titre': result[0], 'Date de publication': result[1],
-                               'Identifiant': result[2], 'auteur': result[3],
-                               'Paragraphe': result[4]}
+            ensemble_trouve = {'titre': result[0], 'date_publication': result[1],
+                               'identifiant': result[2], 'auteur': result[3],
+                               'paragraphe': result[4]}
 
         return ensemble_trouve
 
@@ -88,6 +88,15 @@ class Database:
                 ensemble[un_article_trouvee[2]] = sous_ensemble
 
         return ensemble
+
+    def update_article(self, identifiant, titre, paragraphe):
+        connection = self.get_connection()
+        update_from = "update article "
+        update_set = "set titre = ? , paragraphe = ?"
+        update_where = "where identifiant = ?"
+        sql = update_from + update_set + update_where
+        connection.execute(sql, (titre, paragraphe, identifiant))
+        connection.commit()
 
     def create_user(self, username, email, salt, hashed_password):
         connection = self.get_connection()

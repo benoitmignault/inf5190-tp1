@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 <h1>Voici la page de modification pour l'identifiant &rarr;
-    <span class='info_important'>{{liste_champs['identifiant']}}</span> &larr;
+    <span class='info_important'>{{article_a_modifier['identifiant']}}</span> &larr;
 </h1>
 <div class="container">
     <h2>Section non modifiable de l'article</h2>
@@ -10,15 +10,15 @@
             <tbody>
                 <tr>
                     <td class="cle">Auteur :</td>
-                    <td class="valeur">{{liste_champs['auteur']}}</td>
+                    <td class="valeur">{{article_a_modifier['auteur']}}</td>
                 </tr>
                 <tr>
                     <td class="cle">Identifiant :</td>
-                    <td class="valeur">{{liste_champs['identifiant']}}</td>
+                    <td class="valeur">{{article_a_modifier['identifiant']}}</td>
                 </tr>
                 <tr>
                     <td class="cle">Date de publication :</td>
-                    <td class="valeur">{{liste_champs['date_publication']}}</td>
+                    <td class="valeur">{{article_a_modifier['date_publication']}}</td>
                 </tr>
             </tbody>
         </table>
@@ -27,31 +27,53 @@
     <div class='zone_article_recent'>
         <form action="./article_modification" method="post">
             <div class="modif">
-                <div class="information">
+                {% set champ = '' %}
+                {% if liste_validation_admin['aucune_modification'] or liste_validation_admin['champ_titre_vide'] %}
+                {% set champ = 'erreur' %}
+                {% endif %}
+                <div class="information {{champ}}">
                     <label for="nom_article">Titre de l'article :</label>
                     <div>
                         <input id="nom_article" maxlength="15" minlength="3" name="nom_article"
                                pattern="[a-z0-9A-Z-_']{3,15}" required
                                title="charactères alphanumériques permis entre 3 à 15 charactères"
-                               type="text" value="{{liste_champs['titre']}}">
+                               type="text" value="{{article_a_modifier['titre']}}">
                         <span class="obligatoire">&nbsp;*</span>
                     </div>
                 </div>
-                <div class="information">
-                    <label for="paragraphe">Paragraphe :</label>
+                {% set champ = '' %}
+                {% if liste_validation_admin['aucune_modification'] or liste_validation_admin['champ_paragraphe_vide']
+                %}
+                {% set champ = 'erreur' %}
+                {% endif %}
+                <div class="information {{champ}}">
+                    <label for="nom_paragraphe">Paragraphe :</label>
                     <div>
-                        <textarea cols="50" id="paragraphe" maxlength="100" name="nom_paragraphe"
-                                  required rows="4">{{liste_champs['paragraphe']}}
+                        <textarea cols="50" id="nom_paragraphe" maxlength="100" minlength="3" name="nom_paragraphe"
+                                  required rows="4"
+                                  title="charactères alphanumériques permis entre 3 à 100 charactères">{{article_a_modifier['paragraphe']}}
                         </textarea>
                         <span class="obligatoire">&nbsp;*</span>
                     </div>
                 </div>
             </div>
-            <input name="nom_article_avant" type="hidden" value="{{liste_champs['titre']}}">
-            <input name="nom_paragraphe_avant" type="hidden" value="{{liste_champs['paragraphe']}}">
+            <input name="identifiant" type="hidden" value="{{article_a_modifier['identifiant']}}">
+            <input name="auteur" type="hidden" value="{{article_a_modifier['auteur']}}">
+            <input name="date_publication" type="hidden" value="{{article_a_modifier['date_publication']}}">
+            <input name="nom_article_avant" type="hidden" value="{{article_a_modifier['titre']}}">
+            <input name="nom_paragraphe_avant" type="hidden" value="{{article_a_modifier['paragraphe']}}">
             <div class="troisBTN">
                 <input class="bouton" type='submit' value="Modifier...">
             </div>
+            {% if liste_validation_admin['situation_erreur'] and validation_erreur %}
+            {% for cle, valeur in article_a_modifier['messages'].items() %}
+            <p class="aucun">{{valeur}}</p>
+            {% endfor %}
+            {% elif liste_validation_admin['update_reussi'] %}
+            {% for cle, valeur in article_a_modifier['messages'].items() %}
+            <p class="succes">{{valeur}}</p>
+            {% endfor %}
+            {% endif %}
         </form>
     </div>
     <h2>Section pour tous</h2>

@@ -95,12 +95,19 @@ h2 {
     margin-right: 10px;
 }
 
-.container > .aucun, .container > form > .zone_recherche .aucun{
+.container > .zone_article_recent > form > .succes,
+.container > .zone_article_recent > form > .aucun,
+.container > .aucun,
+.container > form > .zone_recherche .aucun{
     font-weight: bold;
     color:red;
     font-size: 20px;
     text-align: center;
     margin: 5px;
+}
+
+.container > .zone_article_recent > form > .succes{
+    color: green;
 }
 
 .container h2 span{
@@ -187,6 +194,13 @@ h2 {
 .container > .zone_article_recent > form >  .modif > .information > label:hover{
     cursor: pointer;
 }
+
+.container > .zone_article_recent > form > .modif > .erreur > div > input[type=text],
+.container > .zone_article_recent > form > .modif > .erreur > div > textarea{
+    border-color: red;
+    background-color: #FCDEDE;
+}
+
 
 .container > .zone_article_recent > form > .troisBTN > .bouton,
 .container > .zone_article_recent > .admin_modif > .bouton,
