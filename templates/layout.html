@@ -6,6 +6,7 @@
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <meta content="Gestion d'une Bibliotheque" name="description">
     
+    <!-- Ici , on va déterminer quelle icône sera afficher dans l'onglet de la page du site web -->
     {% if not erreur_404 %}
     <!-- «Réutilisation permise» -->
     <!-- https://pixabay.com/fr/illustrations/livres-ic%C3%B4ne-ic%C3%B4ne-de-livre-symbole-1673578/  -->
@@ -15,7 +16,14 @@
     <!-- Fichier 404-notfound.jpg est une propriété du site https://www.flickr.com/photos/guspim/2280690094/ sous licence libre -->
     <link href="/img/icone404.jpg" rel="shortcut icon">
     {% endif %}
+    
     <link href="/css/biblio.css" rel="stylesheet" type="text/css">
+    
+    <!-- Ici , on va détemriner si on a besoin de la feuille de style date.css.
+        Elle sera utile seulement si on est sur la route /admin-nouveau -->
+    {% if page_ajout_article %}
+    <link href="/css/date.css" rel="stylesheet" type="text/css">
+    {% endif %}
     
     {% if titre %}
     <title>Biblio - {{ titre }}</title>
@@ -25,5 +33,13 @@
 </head>
 <body>
     {% block content %}{% endblock %}
+    {% if page_ajout_article %}
+    <!-- Les sources JS ont été utilisé pour gérer la date plus simplement -->
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="//cdn.jsdelivr.net/webshim/1.14.5/polyfiller.js"></script>
+    <script src="/js/date.js"></script>
+    {% endif %}
+    <script src="/js/admin.js"></script>
 </body>
 </html>

@@ -27,8 +27,7 @@ def initial_champ_admin():
 
 def initial_champ_validation():
     liste_validation = {"aucun_article": False, "aucun_article_recent": False, "champ_recher_article_vide": False,
-                        "aucun_article_trouve": False,
-                        "situation_erreur": False}
+                        "aucun_article_trouve": False, "situation_erreur": False}
 
     return liste_validation
 
@@ -36,7 +35,8 @@ def initial_champ_validation():
 def initial_champ_validation_admin():
     liste_validation_admin = {"situation_erreur": False, "champ_titre_pareil": False, "champs_pareils": False,
                               "update_reussi": False, "aucune_modification": False, "champ_paragraphe_pareil": False,
-                              "champs_vides": False, "champ_titre_vide": False, "champ_paragraphe_vide": False}
+                              "champs_vides": False, "champ_titre_vide": False, "champ_paragraphe_vide": False,
+                              "identifiant_deja_prise": False}
 
     return liste_validation_admin
 
@@ -47,16 +47,19 @@ def remplissage_champs(formulaire, liste_champs):
     return liste_champs
 
 
-def remplissage_champs_admin(request, liste_champs_admin):
-    if request.method == "POST":
-        liste_champs_admin['titre'] = request.form['nom_article']
+def remplissage_champs_admin(request, liste_champs_admin, route):
+    liste_champs_admin['titre'] = request.form['nom_article']
+    # Je dois utiliser strip pour retirer les retours de lignes non nécessaire
+    liste_champs_admin['paragraphe'] = request.form['nom_paragraphe'].strip()
+    liste_champs_admin['identifiant'] = request.form['identifiant']
+    liste_champs_admin['date_publication'] = request.form['date_publication']
+    liste_champs_admin['auteur'] = request.form['auteur']
+
+    # Cette condition est pour éviter de la répétition de code avec le remplissage des informations venant de la route
+    # /admin-nouveau/article_ajout'
+    if route == "admin_modif":
         liste_champs_admin['titre_avant'] = request.form['nom_article_avant']
-        # Je dois utiliser strip pour retirer les retours de lignes non nécessaire
-        liste_champs_admin['paragraphe'] = request.form['nom_paragraphe'].strip()
         liste_champs_admin['paragraphe_avant'] = request.form['nom_paragraphe_avant']
-        liste_champs_admin['identifiant'] = request.form['identifiant']
-        liste_champs_admin['date_publication'] = request.form['date_publication']
-        liste_champs_admin['auteur'] = request.form['auteur']
 
     return liste_champs_admin
 

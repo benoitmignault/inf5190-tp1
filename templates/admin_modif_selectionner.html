@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-<h1>Voici la page de modification pour l'identifiant &rarr;
+<h1>Page de modification d'un article avec l'identifiant &rarr;
     <span class='info_important'>{{article_a_modifier['identifiant']}}</span> &larr;
 </h1>
 <div class="container">
@@ -35,7 +35,7 @@
                     <label for="nom_article">Titre de l'article :</label>
                     <div>
                         <input id="nom_article" maxlength="15" minlength="3" name="nom_article"
-                               pattern="[a-z0-9A-Z-_']{3,15}" required
+                               pattern="[a-z0-9A-Z]{3,15}" required
                                title="charactères alphanumériques permis entre 3 à 15 charactères"
                                type="text" value="{{article_a_modifier['titre']}}">
                         <span class="obligatoire">&nbsp;*</span>
@@ -50,7 +50,7 @@
                     <label for="nom_paragraphe">Paragraphe :</label>
                     <div>
                         <textarea cols="50" id="nom_paragraphe" maxlength="100" minlength="3" name="nom_paragraphe"
-                                  required rows="4"
+                                  required rows="4" pattern="[0-9a-zA-Z -']{3,100}"
                                   title="charactères alphanumériques permis entre 3 à 100 charactères">{{article_a_modifier['paragraphe']}}
                         </textarea>
                         <span class="obligatoire">&nbsp;*</span>
@@ -64,6 +64,7 @@
             <input name="nom_paragraphe_avant" type="hidden" value="{{article_a_modifier['paragraphe']}}">
             <div class="troisBTN">
                 <input class="bouton" type='submit' value="Modifier...">
+                <input class="bouton" type='reset' value="Effacer..." onClick="customReset();">
             </div>
             {% if liste_validation_admin['situation_erreur'] and validation_erreur %}
             {% for cle, valeur in article_a_modifier['messages'].items() %}

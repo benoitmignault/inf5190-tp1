@@ -191,7 +191,7 @@ h2 {
     margin-right: 10px;
 }
 
-.container > .zone_article_recent > form >  .modif > .information > label:hover{
+.container > .zone_article_recent > form > .modif > .information > label:hover{
     cursor: pointer;
 }
 

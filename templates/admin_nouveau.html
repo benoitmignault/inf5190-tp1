@@ -1,0 +1,104 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Page d'ajout pour un nouvel article qui sera entreposé dans la bibliothèque</h1>
+<div class="container">
+    <h2>Section du formulaire pour ajouter un article</h2>
+    <div class='zone_article_recent'>
+        <form action="./article_ajout" method="post">
+            <div class="modif">
+                <div class="information">
+                    <label for="nom_article">Titre de l'article :</label>
+                    <div>
+                        <input id="nom_article" maxlength="15" minlength="3" name="nom_article"
+                               pattern="[a-z0-9A-Z]{3,15}" required
+                               title="Charactères alphanumériques permis entre 3 à 15 charactères"
+                               type="text" value="">
+                        <span class="obligatoire">&nbsp;*</span>
+                    </div>
+                </div>
+                <div class="information">
+                    <label for="identifiant">Identifiant :</label>
+                    <div>
+                        <input id="identifiant" maxlength="15" minlength="3" name="identifiant"
+                               pattern="[a-z0-9A-Z]{3,15}" required
+                               title="Charactères alphanumériques permis entre 3 à 15 charactères"
+                               type="text" value="">
+                        <span class="obligatoire">&nbsp;*</span>
+                    </div>
+                </div>
+                <div class="information">
+                    <label for="date">Date de publication :</label>
+                    <div class="form-row animate-2">
+                        <input data-date='{"startView": 2, "openOnMouseFocus": true}' id="date"
+                               name="date" required="" type="date" value="">
+                        <span class="obligatoire">&nbsp;*</span>
+                    </div>
+                </div>
+                <div class="information">
+                    <label for="nom_auteur">Nom de l'auteur :</label>
+                    <div>
+                        <input id="nom_auteur" maxlength="15" minlength="3" name="nom_auteur"
+                               pattern="[a-zA-Z -']{3,15}" required
+                               title="Charactères alphabétique seulement 3 à 15 charactères"
+                               type="text" value="">
+                        <span class="obligatoire">&nbsp;*</span>
+                    </div>
+                </div>
+                <div class="information">
+                    <label for="nom_paragraphe">Paragraphe :</label>
+                    <div>
+                        <textarea cols="50" id="nom_paragraphe" maxlength="100" minlength="3" name="nom_paragraphe"
+                                  pattern="[0-9a-zA-Z -']{3,100}" required rows="4"
+                                  title="Charactères alphanumériques permis entre 3 à 100 charactères"></textarea>
+                        <span class="obligatoire">&nbsp;*</span>
+                    </div>
+                </div>
+            </div>
+            <div class="troisBTN">
+                <input class="bouton" type='submit' value="Ajouter...">
+                <input class="bouton" type='reset' value="Effacer..." onClick="customReset();">
+            </div>
+            <!-- Section des messages erreurs -->
+        </form>
+    </div>
+    <h2>Section pour tous</h2>
+    <div class='zone_admin'>
+        <div class="admin">
+            <a class="bouton" href="/">Page D'accueil</a>
+        </div>
+    </div>
+    <h2>Section pour l'administrateur du site</h2>
+    <div class='zone_admin'>
+        <div class="admin">
+            <a class="bouton" href="/admin">Afficher tous les articles</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                

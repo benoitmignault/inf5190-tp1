@@ -42,6 +42,7 @@ def home():
     if session.get('ensemble_recent'):
         # Et si on a un ensemble trouvé, ce qui veut dire que nous n'avons pas trouvé article
         ensemble_recent = session['ensemble_recent']
+        # Comprendre pourquoi il y a un double triage lorsque je reviens d'une recherche qui a rien donnée
     else:
         ensemble_recent = conn_db.get_articles_recents()
 
@@ -153,7 +154,6 @@ def admin_modif_article(identifiant):
             if session.get('modification_reussi') and session['modification_reussi']:
                 titre = "Modification réussi !"
 
-            # print(article_a_modifier)
             return render_template("admin_modif_selectionner.html", titre=titre, article_a_modifier=article_a_modifier,
                                    liste_validation_admin=liste_validation_admin,
                                    validation_erreur=validation_erreur)
@@ -175,14 +175,14 @@ def admin_modification_article_en_cours():
     liste_champs_admin = initial_champ_admin()  # Création de la liste d'information nécessaire
     liste_validation_admin = initial_champ_validation_admin()
     # On utilise la fonction pour les besoin de l'administrateur
-    liste_champs_admin = remplissage_champs_admin(request, liste_champs_admin)
+    liste_champs_admin = remplissage_champs_admin(request, liste_champs_admin, "admin_modif")
     liste_validation_admin = validation_champs_admin(liste_champs_admin, liste_validation_admin)
     liste_validation_admin = situation_erreur(liste_validation_admin)
 
     if liste_validation_admin['situation_erreur'] and liste_validation_admin['aucune_modification']:
         liste_champs_admin['messages'] = message_erreur_admin(liste_validation_admin)
         # On doit mettre la valeur contraire
-        # sinon il va avoir un bug au niveau de la couleur des messages et du titre de la page web
+        # Lorsque nous avons une erreur, on doit mettre à True l'indicateur erreur et à False indicateur réussi
         session['situation_erreur'] = True
         session['modification_reussi'] = False
         session['liste_validation_admin'] = liste_validation_admin
@@ -196,13 +196,36 @@ def admin_modification_article_en_cours():
         liste_validation_admin['update_reussi'] = True
         liste_champs_admin['messages'] = message_erreur_admin(liste_validation_admin)
         # On doit mettre la valeur contraire
-        # sinon il va avoir un bug au niveau de la couleur des messages et du titre de la page web
+        # Lorsque nous avons une erreur, on doit mettre à False l'indicateur erreur et à True indicateur réussi
         session['modification_reussi'] = True
         session['situation_erreur'] = False
         session['liste_validation_admin'] = liste_validation_admin
         session['liste_champs_admin'] = liste_champs_admin
 
         return redirect(url_for('.admin_modif_article', identifiant=liste_champs_admin['identifiant']))
+
+
+@app.route('/admin-nouveau', methods=["GET"])
+def admin_nouveau():
+    # Lorsque nous arrivons ici, on doit supprimer les cookies
+    # ayant pas encore été supprimés car ils ne seront plus nécessaire ici
+    session.clear()
+    page_ajout_article = True  # Seulement ici est sera mise à vrai pour les besoins du formulaire ajout d'article
+    return render_template("admin_nouveau.html", titre="Ajout d'article", page_ajout_article=page_ajout_article)
+
+
+@app.route('/admin-nouveau/article_ajout', methods=["POST"])
+def admin_nouveau_ajout():
+    conn_db = get_db()
+    liste_champs_admin = initial_champ_admin()  # Création de la liste d'information nécessaire
+    liste_validation_admin = initial_champ_validation_admin()
+    liste_champs_admin = remplissage_champs_admin(request, liste_champs_admin, "admin_nouveau")
+    article_verifier = conn_db.get_articles_selectionner(liste_champs_admin['identifiant'])
+    if len(article_verifier) > 0:
+        liste_validation_admin['identifiant_deja_prise'] = True
+
+    print(liste_validation_admin['identifiant_deja_prise'])
+    return "Allo"
 
 
 @app.route('/article/')

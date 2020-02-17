@@ -29,8 +29,8 @@ class Database:
         ensemble = {}  # L'ensemble des articles jusqu'à un max de 5 des plus récents
         if result is not None:
             for un_article in result:
-                sous_ensemble = {'Titre': un_article[0], 'Identifiant': un_article[1], 'Auteur': un_article[2],
-                                 'Date de publication': un_article[3], 'Contenu': un_article[4]}
+                sous_ensemble = {'titre': un_article[0], 'identifiant': un_article[1], 'auteur': un_article[2],
+                                 'date_publication': un_article[3], 'paragraphe': un_article[4]}
                 ensemble[un_article[1]] = sous_ensemble
 
         return ensemble
@@ -49,7 +49,7 @@ class Database:
         ensemble_trouve = {}  # L'ensemble des articles jusqu'à un max de 5 des plus récents
         if result is not None:
             for un_article_trouvee in result:
-                sous_ensemble = {'Titre': un_article_trouvee[0], 'Date de publication': un_article_trouvee[1]}
+                sous_ensemble = {'titre': un_article_trouvee[0], 'date_publication': un_article_trouvee[1]}
                 ensemble_trouve[un_article_trouvee[2]] = sous_ensemble
 
         return ensemble_trouve
@@ -57,7 +57,7 @@ class Database:
     # Sera utiliser avec la route /article/<identifiant»
     def get_articles_selectionner(self, identifiant):
         cursor = self.get_connection().cursor()
-        select = "select titre, date_publication, identifiant, auteur, paragraphe "
+        select = "select titre, identifiant, auteur, date_publication, paragraphe "
         fromm = "from article "
         where = "where identifiant = ?"
         sql = select + fromm + where
@@ -66,9 +66,8 @@ class Database:
         ensemble_trouve = {}  # L'ensemble des articles jusqu'à un max de 5 des plus récents
 
         if result is not None:
-            ensemble_trouve = {'titre': result[0], 'date_publication': result[1],
-                               'identifiant': result[2], 'auteur': result[3],
-                               'paragraphe': result[4]}
+            ensemble_trouve = {'titre': result[0], 'identifiant': result[1], 'auteur': result[2],
+                               'date_publication': result[3], 'paragraphe': result[4]}
 
         return ensemble_trouve
 
@@ -84,7 +83,7 @@ class Database:
         ensemble = {}  # L'ensemble des articles jusqu'à un max de 5 des plus récents
         if result is not None:
             for un_article_trouvee in result:
-                sous_ensemble = {'Titre': un_article_trouvee[0], 'Date de publication': un_article_trouvee[1]}
+                sous_ensemble = {'titre': un_article_trouvee[0], 'date_publication': un_article_trouvee[1]}
                 ensemble[un_article_trouvee[2]] = sous_ensemble
 
         return ensemble
