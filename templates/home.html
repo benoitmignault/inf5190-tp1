@@ -3,7 +3,7 @@
 <h1>Bienvenue sur le site de la bibliothèque</h1>
 <div class="container">
     <h2>Section pour rechercher un article dans l'inventaire</h2>
-    <form action="./recherche" method="post">
+    <form action="/recherche" method="post">
         <div class='zone_recherche'>
             <div class="article">
                 <input id="recher_article" maxlength="25" minlength="3" name="recher_article"
@@ -18,7 +18,6 @@
             <p class="aucun">{{liste_champs['messages']['zero_article_trouve']}}</p>
             {% endif %}
         </div>
-        
     </form>
     {% if liste_validation['aucun_article_recent'] %}
     <p class="aucun">{{liste_champs['messages']['zero_article_recent']}}</p>

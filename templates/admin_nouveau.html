@@ -4,59 +4,92 @@
 <div class="container">
     <h2>Section du formulaire pour ajouter un article</h2>
     <div class='zone_article_recent'>
-        <form action="./article-ajout" method="post">
+        <form action="/admin-nouveau/article-ajout" method="post">
             <div class="modif">
-                <div class="information">
-                    <label for="ajout-article">Titre de l'article :</label>
+                {% set champ = '' %}
+                {% if liste_validation['champ_titre_vide'] or liste_validation['longueur_titre_inv'] %}
+                {% set champ = 'erreur' %}
+                {% endif %}
+                <div class="information {{champ}}">
+                    <label for="ajout_article">Titre de l'article :</label>
                     <div>
                         <input id="ajout_article" maxlength="15" minlength="3" name="nom_article"
-                               pattern="[a-z0-9 -'A-Z]{3,15}" required type="text"
-                               title="Charactères alphanumériques permis entre 3 à 15 charactères">
+                               pattern="[a-z0-9 -'A-Z]{3,15}" required
+                               title="Charactères alphanumériques permis entre 3 à 15 charactères"
+                               type="text"
+                               value="{{liste_champs['titre']}}">
                         <span class="obligatoire">&nbsp;*</span>
                     </div>
                 </div>
-                <div class="information">
+                {% set champ = '' %}
+                {% if liste_validation['champ_identifiant_vide'] or liste_validation['longueur_identifiant_inv'] or
+                liste_validation['identifiant_deja_prise'] %}
+                {% set champ = 'erreur' %}
+                {% endif %}
+                <div class="information {{champ}}">
                     <label for="ajout_identifiant">Identifiant :</label>
                     <div>
                         <input id="ajout_identifiant" maxlength="15" minlength="3" name="identifiant"
                                pattern="[a-z0-9A-Z]{3,15}" required
                                title="Charactères alphanumériques permis entre 3 à 15 charactères"
-                               type="text" value="">
+                               type="text" value="{{liste_champs['identifiant']}}">
                         <span class="obligatoire">&nbsp;*</span>
                     </div>
                 </div>
-                <div class="information">
-                    <label for="date">Date de publication :</label>
+                {% set champ = '' %}
+                {% if liste_validation['champ_date_vide'] or liste_validation['champ_date_inv'] %}
+                {% set champ = 'erreur' %}
+                {% endif %}
+                <div class="information {{champ}}">
+                    <label for="ajout_date">Date de publication :</label>
                     <div class="form-row animate-2">
-                        <input data-date='{"startView": 2, "openOnMouseFocus": true}' id="date"
-                               placeholder="2020-01-01" name="date" required="" type="date" value="">
+                        <input data-date='{"startView": 2, "openOnMouseFocus": true}' id="ajout_date"
+                               name="date" placeholder="2020-01-01" required="" type="date"
+                               value="{{liste_champs['date_publication']}}">
                         <span class="obligatoire">&nbsp;*</span>
                     </div>
                 </div>
-                <div class="information">
-                    <label for="nom_auteur">Nom de l'auteur :</label>
+                {% set champ = '' %}
+                {% if liste_validation['champ_auteur_vide'] or liste_validation['longueur_auteur_inv'] %}
+                {% set champ = 'erreur' %}
+                {% endif %}
+                <div class="information {{champ}}">
+                    <label for="ajout_auteur">Nom de l'auteur :</label>
                     <div>
-                        <input id="nom_auteur" maxlength="15" minlength="3" name="nom_auteur"
+                        <input id="ajout_auteur" maxlength="15" minlength="3" name="nom_auteur"
                                pattern="[a-zA-Z -']{3,15}" required
                                title="Charactères alphabétique seulement 3 à 15 charactères"
-                               type="text" value="">
+                               type="text" value="{{liste_champs['auteur']}}">
                         <span class="obligatoire">&nbsp;*</span>
                     </div>
                 </div>
-                <div class="information">
+                {% set champ = '' %}
+                {% if liste_validation['champ_paragraphe_vide'] or liste_validation['longueur_paragraphe_inv'] %}
+                {% set champ = 'erreur' %}
+                {% endif %}
+                <div class="information {{champ}}">
                     <label for="ajout_paragraphe">Paragraphe :</label>
                     <div>
-                        <textarea cols="50" id="ajout_paragraphe" maxlength="100" minlength="3" name="nom_paragraphe" pattern="[0-9a-zA-Z -']{3,100}" required rows="4"
-                        title="Charactères alphanumériques permis entre 3 à 100 charactères"></textarea>
+                        <textarea cols="50" id="ajout_paragraphe" maxlength="100"
+                                  minlength="3" name="nom_paragraphe" required rows="4"
+                                  title="Charactères alphanumériques permis entre 3 à 100 charactères">{{liste_champs['paragraphe']}}</textarea>
                         <span class="obligatoire">&nbsp;*</span>
                     </div>
                 </div>
             </div>
             <div class="troisBTN">
                 <input class="bouton" type='submit' value="Ajouter...">
-                <input class="bouton" type='reset' value="Effacer..." onClick="reset_ajout();">
+                <input class="bouton" onClick="reset_ajout();" type='reset' value="Effacer...">
             </div>
-            <!-- Section des messages erreurs -->
+            {% if liste_validation['situation_erreur'] and validation_erreur %}
+            {% for message in liste_champs['messages'] %}
+            <p class="aucun">{{message}}</p>
+            {% endfor %}
+            {% elif liste_validation['ajout_reussi'] %}
+            {% for message in liste_champs['messages'] %}
+            <p class="succes">{{message}}</p>
+            {% endfor %}
+            {% endif %}
         </form>
     </div>
     <h2>Section pour tous</h2>
@@ -73,30 +106,3 @@
     </div>
 </div>
 {% endblock content %}
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                

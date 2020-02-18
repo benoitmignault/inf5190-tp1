@@ -215,12 +215,12 @@ def admin_nouveau():
     if not session.get('tentative_ajout'):
         session.clear()
         # Je dois les mettre par défault
-        liste_champs_admin = initial_champ_admin()
-        liste_validation_admin = initial_champ_validation_admin()
+        liste_champs = initial_champ_admin()
+        liste_validation = initial_champ_validation_admin()
         titre = "Ajout d'article"
     else:
-        liste_champs_admin = session['liste_champs_admin']
-        liste_validation_admin = session['liste_validation_admin']
+        liste_champs = session['liste_champs_admin']
+        liste_validation = session['liste_validation_admin']
         if session.get('situation_erreur') and session['situation_erreur']:
             titre = "Ajout en Erreur !"
             validation_erreur = True
@@ -228,8 +228,9 @@ def admin_nouveau():
         if session.get('ajout_reussi') and session['ajout_reussi']:
             titre = "Ajout réussi !"
 
-    return render_template("admin_nouveau.html", liste_validation_admin=liste_validation_admin,
-                           liste_champs_admin=liste_champs_admin, titre=titre, page_ajout_article=page_ajout_article)
+    return render_template("admin_nouveau.html", liste_validation=liste_validation,
+                           validation_erreur=validation_erreur, liste_champs=liste_champs, titre=titre,
+                           page_ajout_article=page_ajout_article)
 
 
 @app.route('/admin-nouveau/article-ajout', methods=["POST"])
@@ -256,8 +257,9 @@ def admin_nouveau_ajout():
     else:
         session['situation_erreur'] = True
         session['ajout_reussi'] = False
-
-    liste_champs_admin['messages'] = message_erreur_admin(liste_validation_admin)
+    print(liste_validation_admin['ajout_reussi'])
+    liste_champs_admin['messages'] = message_erreur_admin_ajout(liste_validation_admin)
+    print(liste_champs_admin['messages'])
     # Seulement ici est sera mise à vrai pour les besoins du formulaire ajout d'article
     session['tentative_ajout'] = True
     session['liste_champs_admin'] = liste_champs_admin

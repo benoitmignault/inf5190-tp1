@@ -190,21 +190,41 @@ def message_erreur(liste_validation):
     return messages
 
 
-def message_erreur_admin(liste_validation_admin):
-    messages = {}
+def message_erreur_admin(liste_validation):
+    messages = []
+    if liste_validation['champ_titre_vide']:
+        messages.append("Le nouveau titre de l'article ne peut être vide !")
 
-    # Je dois ajouter les situations possible
+    if liste_validation['champ_paragraphe_vide']:
+        messages.append("Le nouveau paragraphe de l'article ne peut être vide !")
 
-    if liste_validation_admin['champ_titre_vide']:
-        messages['champ_titre_vide'] = "Le nouveau titre de l'article ne peut être vide !"
+    if liste_validation['aucune_modification']:
+        messages.append("Vous devez modifier au moins l'un des champs suivant : Titre ou Paragraphe !")
 
-    if liste_validation_admin['champ_paragraphe_vide']:
-        messages['champ_paragraphe_vide'] = "Le nouveau paragraphe de l'article ne peut être vide !"
+    if liste_validation['update_reussi']:
+        messages.append("La mise à jour de l'article a été un succès !")
 
-    if liste_validation_admin['aucune_modification']:
-        messages['aucune_modification'] = "Vous devez modifier au moins l'un des champs suivant : Titre ou Paragraphe !"
+    return messages
 
-    if liste_validation_admin['update_reussi']:
-        messages['update_reussi'] = "La mise à jour de l'article a été un succès !"
+
+def message_erreur_admin_ajout(liste_validation):
+    """
+    liste_validation_admin =
+    {
+    "update_reussi": False, "aucune_modification": False, "champ_paragraphe_pareil": False,
+    "champs_vides": False, "champ_titre_vide": False, "champ_paragraphe_vide": False,
+    "champ_date_vide": False, "champ_identifiant_vide": False,
+    "champ_auteur_vide": False, "identifiant_deja_prise": False,
+    "longueur_article_inv": False, "longueur_paragraphe_inv": False,
+    "longueur_titre_inv": False, "longueur_auteur_inv": False,
+    "longueur_identifiant_inv": False, "champ_date_inv": False, "ajout_reussi": False}
+    """
+    messages = []
+    if liste_validation['ajout_reussi']:
+        messages.append("L'ajout de l'article a fonctionné !")
+
+    else:
+        if liste_validation['identifiant_deja_prise']:
+            messages.append("Attention ! L'identifiant existe déjà, veuiller en choisir un autre !")
 
     return messages

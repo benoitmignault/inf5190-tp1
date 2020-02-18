@@ -25,7 +25,7 @@
     </div>
     <h2>Section modifiable de l'article</h2>
     <div class='zone_article_recent'>
-        <form action="./article-modification" method="post">
+        <form action="/admin-modif/article-modification" method="post">
             <div class="modif">
                 {% set champ = '' %}
                 {% if liste_validation_admin['aucune_modification'] or liste_validation_admin['champ_titre_vide'] %}
@@ -65,12 +65,12 @@
                 <input class="bouton" onClick="reset_modif();" type='reset' value="Effacer...">
             </div>
             {% if liste_validation_admin['situation_erreur'] and validation_erreur %}
-            {% for cle, valeur in article_a_modifier['messages'].items() %}
-            <p class="aucun">{{valeur}}</p>
+            {% for message in article_a_modifier['messages'] %}
+            <p class="aucun">{{message}}</p>
             {% endfor %}
             {% elif liste_validation_admin['update_reussi'] %}
-            {% for cle, valeur in article_a_modifier['messages'].items() %}
-            <p class="succes">{{valeur}}</p>
+            {% for message in article_a_modifier['messages'] %}
+            <p class="succes">{{message}}</p>
             {% endfor %}
             {% endif %}
         </form>
