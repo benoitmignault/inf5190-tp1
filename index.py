@@ -257,9 +257,7 @@ def admin_nouveau_ajout():
     else:
         session['situation_erreur'] = True
         session['ajout_reussi'] = False
-    print(liste_validation_admin['ajout_reussi'])
     liste_champs_admin['messages'] = message_erreur_admin_ajout(liste_validation_admin)
-    print(liste_champs_admin['messages'])
     # Seulement ici est sera mise à vrai pour les besoins du formulaire ajout d'article
     session['tentative_ajout'] = True
     session['liste_champs_admin'] = liste_champs_admin

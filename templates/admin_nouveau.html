@@ -2,6 +2,7 @@
 {% block content %}
 <h1>Page d'ajout pour un nouvel article qui sera entreposé dans la bibliothèque</h1>
 <div class="container">
+    <p class="desktop" id="hautPageDesktop"></p>
     <h2>Section du formulaire pour ajouter un article</h2>
     <div class='zone_article_recent'>
         <form action="/admin-nouveau/article-ajout" method="post">
@@ -103,6 +104,9 @@
         <div class="admin">
             <a class="bouton" href="/admin">Afficher tous les articles</a>
         </div>
+    </div>
+     <div class="return">
+        <a class="desktop" href="#hautPageDesktop">Haut de la page</a>
     </div>
 </div>
 {% endblock content %}

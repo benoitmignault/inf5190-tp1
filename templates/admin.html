@@ -2,6 +2,7 @@
 {% block content %}
 <h1>Bienvenue à vous ! Administrateur de l'inventaire</h1>
 <div class="container">
+    <p class="desktop" id="hautPageDesktop"></p>
     {% if liste_validation['aucun_article'] %}
     <p class="aucun">{{liste_champs['messages']['aucun_article']}}</p>
     {% else %}
@@ -39,6 +40,9 @@
         <div class="admin">
             <a class="bouton" href="/admin-nouveau">Ajouter un nouvel article</a>
         </div>
+    </div>
+    <div class="return">
+        <a class="desktop" href="#hautPageDesktop">Haut de la page</a>
     </div>
 </div>
 {% endblock content %}

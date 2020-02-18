@@ -51,6 +51,10 @@ h2 {
     width: 100%;
 }
 
+.container > .desktop{
+    margin: 0px;
+}
+
 .container > form > .zone_recherche,
 .container > .zone_admin,
 .container > .zone_article_recent,
@@ -241,5 +245,28 @@ h2 {
     background-image: -ms-linear-gradient(top, #c7dced, #6f8491);
     background-image: -o-linear-gradient(top, #c7dced, #6f8491);
     background-image: linear-gradient(to bottom, #c7dced, #6f8491);
+    cursor: pointer;
+}
+
+.container > .return{
+    width: 100%;
+}
+
+.container > .return > .desktop {
+    border-radius: 10px;
+    display: block;
+    color: black;
+    text-decoration: none;
+    background-color: darkgrey;
+    font-size: 18px;
+    font-weight: bold;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+.container > .return > .desktop:hover {
+    background-color: black;
+    color: red;
     cursor: pointer;
 }

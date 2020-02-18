@@ -100,7 +100,8 @@ class Database:
 
     def ajouter_article(self, date_publication, titre, paragraphe, identifiant, auteur):
         connection = self.get_connection()
-        insert_bd = "insert into article (date_publication, titre, paragraphe, identifiant, auteur) values(?, ?, ?, ?, ?)"
+        insert_bd = "insert into article (date_publication, titre, paragraphe, identifiant, auteur) " \
+                    "values(?, ?, ?, ?, ?)"
         connection.execute(insert_bd, (date_publication, titre, paragraphe, identifiant, auteur))
         connection.commit()
         # Valider si possible plutard si l'ajout a bien marché
