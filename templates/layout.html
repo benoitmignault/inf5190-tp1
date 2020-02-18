@@ -17,10 +17,10 @@
     <link href="/img/icone404.jpg" rel="shortcut icon">
     {% endif %}
     
+    <!-- Mon design de mes différents pages web -->
     <link href="/css/biblio.css" rel="stylesheet" type="text/css">
     
-    <!-- Ici , on va déterminer si on a besoin de la feuille de style date.css.
-        Elle sera utile seulement si on est sur la route /admin-nouveau -->
+    <!-- Cette feuille de style sera utilisée pour la route /admin-nouveau seulement -->
     {% if page_ajout_article %}
     <link href="/vendor/css/date.css" rel="stylesheet" type="text/css">
     {% endif %}
@@ -34,7 +34,7 @@
 <body>
     {% block content %}{% endblock %}
     {% if page_ajout_article %}
-    <!-- Les sources JS ont été utilisé pour gérer la date plus simplement -->
+    <!-- Les sources JS ont été utilisé pour le date picker lorsqu'on ajoute un article -->
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="//cdn.jsdelivr.net/webshim/1.14.5/polyfiller.js"></script>

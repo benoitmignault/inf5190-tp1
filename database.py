@@ -96,9 +96,11 @@ class Database:
         sql = update_from + update_set + update_where
         connection.execute(sql, (titre, paragraphe, identifiant))
         connection.commit()
+        # Valider si possible plutard si l'update a bien marché
 
-    def create_user(self, username, email, salt, hashed_password):
+    def ajouter_article(self, date_publication, titre, paragraphe, identifiant, auteur):
         connection = self.get_connection()
-        connection.execute("insert into users(utilisateur, email, salt, hash) values(?, ?, ?, ?)",
-                           (username, email, salt, hashed_password))
+        insert_bd = "insert into article (date_publication, titre, paragraphe, identifiant, auteur) values(?, ?, ?, ?, ?)"
+        connection.execute(insert_bd, (date_publication, titre, paragraphe, identifiant, auteur))
         connection.commit()
+        # Valider si possible plutard si l'ajout a bien marché

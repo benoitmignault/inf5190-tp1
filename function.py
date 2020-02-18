@@ -1,6 +1,10 @@
+import re  # pour la gestion des pattern, ici pour la date
+
 from flask import g
 
 from .database import Database  # Importer le fichier database.py
+
+PATTERN_DATE = "(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])"
 
 
 def get_db():
@@ -10,7 +14,8 @@ def get_db():
     return g._database
 
 
-def initial_champ():
+# Fonction utiliser pour la page d'accueil et la route qui fait des recherches articles
+def initial_champ_recherche():
     liste_champs = {"nb_article": 0, "nb_article_recent": 0, "nb_article_trouve": 0, "recher_article": "",
                     "message": {}, "titre": "", "paragraphe": "", "identifiant": "", "date_publication": "",
                     "auteur": ""}
@@ -18,88 +23,148 @@ def initial_champ():
     return liste_champs
 
 
-def initial_champ_admin():
-    liste_champs_admin = {"titre": "", "titre_avant": "", "paragraphe": "", "paragraphe_avant": "",
-                          "identifiant": "", "date_publication": "", "auteur": ""}
-
-    return liste_champs_admin
-
-
-def initial_champ_validation():
+# Fonction utiliser pour la page d'accueil et la route qui fait des recherches articles
+def initial_champ_validation_recherche():
     liste_validation = {"aucun_article": False, "aucun_article_recent": False, "champ_recher_article_vide": False,
                         "aucun_article_trouve": False, "situation_erreur": False}
 
     return liste_validation
 
 
-def initial_champ_validation_admin():
-    liste_validation_admin = {"situation_erreur": False, "champ_titre_pareil": False, "champs_pareils": False,
-                              "update_reussi": False, "aucune_modification": False, "champ_paragraphe_pareil": False,
-                              "champs_vides": False, "champ_titre_vide": False, "champ_paragraphe_vide": False,
-                              "identifiant_deja_prise": False}
-
-    return liste_validation_admin
-
-
-def remplissage_champs(formulaire, liste_champs):
+def remplissage_champs_recherche(formulaire, liste_champs):
     liste_champs['recher_article'] = formulaire['recher_article']
 
     return liste_champs
 
 
-def remplissage_champs_admin(request, liste_champs_admin, route):
-    print(route)
-    # Cette condition est pour seulement lorsqu'on ajoute un article
-    if route == "admin_nouveau":
-        pass
-    # liste_champs_admin['date_publication'] = request.form['date']
-
-    liste_champs_admin['titre'] = request.form['nom_article']
-    # Je dois utiliser strip pour retirer les retours de lignes non nécessaire
-    liste_champs_admin['paragraphe'] = request.form['nom_paragraphe'].strip()
-    liste_champs_admin['identifiant'] = request.form['identifiant']
-    liste_champs_admin['auteur'] = request.form['nom_auteur']
-
-    # Cette condition est pour seulement lorsqu'on modifier un article
-    if route == "admin_modif":
-        liste_champs_admin['titre_avant'] = request.form['nom_article_avant']
-        liste_champs_admin['paragraphe_avant'] = request.form['nom_paragraphe_avant']
-
-    return liste_champs_admin
-
-
-def validation_champs(liste_champs, liste_validation):
+def validation_champs_recherche(liste_champs, liste_validation):
     if liste_champs['recher_article'] == "":
         liste_validation['champ_recher_article_vide'] = True
 
     return liste_validation
 
 
-def validation_champs_admin(liste_champs_admin, liste_validation_admin):
-    if liste_champs_admin['titre'] == "":
-        liste_validation_admin['champ_titre_vide'] = True
+# Fonction utiliser pour la gestion des articles lors d'ajout ou modification 
+def initial_champ_admin():
+    liste_champs_admin = {"titre": "", "titre_avant": "", "paragraphe": "", "paragraphe_avant": "", "identifiant": "",
+                          "date_publication": "", "auteur": ""}
 
-    if liste_champs_admin['paragraphe'] == "":
-        liste_validation_admin['champ_paragraphe_vide'] = True
+    return liste_champs_admin
 
-    if liste_validation_admin['champ_titre_vide'] or liste_validation_admin['champ_paragraphe_vide']:
-        liste_validation_admin['champs_vides'] = True
 
-    if not liste_validation_admin['champs_vides']:
-        # Seulement si les champs ne sont pas vide, qu'on va poursuivre les validations de manière logique
-        if liste_champs_admin['paragraphe'] == liste_champs_admin['paragraphe_avant']:
-            liste_validation_admin['champ_paragraphe_pareil'] = True
+# Cette fonction sera utiliser pour les modifications et ajout des articles
 
-        if liste_champs_admin['titre'] == liste_champs_admin['titre_avant']:
-            liste_validation_admin['champ_titre_pareil'] = True
-
-        if liste_validation_admin['champ_paragraphe_pareil'] and liste_validation_admin['champ_titre_pareil']:
-            liste_validation_admin['aucune_modification'] = True
+def initial_champ_validation_admin():
+    liste_validation_admin = {"situation_erreur": False, "champ_titre_pareil": False, "champs_pareils": False,
+                              "update_reussi": False, "aucune_modification": False, "champ_paragraphe_pareil": False,
+                              "champs_vides": False, "champ_titre_vide": False, "champ_paragraphe_vide": False,
+                              "champ_date_vide": False, "champ_identifiant_vide": False,
+                              "champ_auteur_vide": False, "identifiant_deja_prise": False,
+                              "longueur_article_inv": False, "longueur_paragraphe_inv": False,
+                              "longueur_titre_inv": False, "longueur_auteur_inv": False,
+                              "longueur_identifiant_inv": False, "champ_date_inv": False, "ajout_reussi": False}
 
     return liste_validation_admin
 
 
-# Nous allons utiliser cette focntion pour la recherche et pour la section admin
+# J'ai décidé de séparer mes fonction de remplissages comme ce n'est pas les mêmes champs qui seront utilisés
+
+# Fonction utiliser lors de modifier les articles
+
+
+# Fonction utiliser lors de modification articles
+# liste_champs représente ceux du fichier index.py liste_champs_admin
+def remplissage_champs_modif_article(request, liste_champs):
+    liste_champs['titre'] = request.form['nom_article']
+    # Je dois utiliser strip pour retirer les retours de lignes non nécessaire
+    liste_champs['paragraphe'] = request.form['nom_paragraphe'].strip()
+    liste_champs['identifiant'] = request.form['identifiant']
+    liste_champs['auteur'] = request.form['nom_auteur']
+    liste_champs['date_publication'] = request.form['date_publication']
+    liste_champs['titre_avant'] = request.form['nom_article_avant']
+    liste_champs['paragraphe_avant'] = request.form['nom_paragraphe_avant']
+
+    return liste_champs
+
+
+# Fonction utiliser lors d'ajout les articles
+# liste_champs représente ceux du fichier index.py liste_champs_admin
+
+def remplissage_champs_ajout_article(request, liste_champs):
+    liste_champs['date_publication'] = request.form['date']
+    liste_champs['titre'] = request.form['nom_article']
+    # Je dois utiliser strip pour retirer les retours de lignes non nécessaire
+    liste_champs['paragraphe'] = request.form['nom_paragraphe'].strip()
+    liste_champs['identifiant'] = request.form['identifiant']
+    liste_champs['auteur'] = request.form['nom_auteur']
+
+    return liste_champs
+
+
+# liste_champs représente ceux du fichier index.py liste_champs_admin
+# liste_validation représente ceux du fichier index.py liste_validation_admin
+# Le but était de simpliment aléger la lourdeur du code
+
+def validation_champs_article(liste_champs, liste_validation):
+    # Validation pour le titre
+    if liste_champs['titre'] == "":
+        liste_validation['champ_titre_vide'] = True
+
+    elif not (3 <= len(liste_champs['titre']) <= 15):
+        liste_validation['longueur_titre_inv'] = True
+
+    # Validation pour le paragraphe    
+    if liste_champs['paragraphe'] == "":
+        liste_validation['champ_paragraphe_vide'] = True
+
+    elif not (3 <= len(liste_champs['paragraphe']) <= 100):
+        liste_validation['longueur_paragraphe_inv'] = True
+
+    # https://stackoverflow.com/questions/41129921/validate-an-iso-8601-datetime-string-in-python
+    # Validation pour la date    
+    if liste_champs['date_publication'] == "":
+        liste_validation['champ_date_vide'] = True
+    else:
+        match_iso8601 = re.compile(PATTERN_DATE).match
+        if match_iso8601(liste_champs['date_publication']) is None:
+            liste_validation['champ_date_inv'] = True
+
+    # Validation pour l'identifiant
+    if liste_champs['identifiant'] == "":
+        liste_validation['champ_identifiant_vide'] = True
+
+    elif not (3 <= len(liste_champs['identifiant']) <= 15):
+        liste_validation['longueur_identifiant_inv'] = True
+
+        # Validation pour l'auteur
+    if liste_champs['auteur'] == "":
+        liste_validation['champ_auteur_vide'] = True
+
+    elif not (3 <= len(liste_champs['auteur']) <= 15):
+        liste_validation['longueur_auteur_inv'] = True
+
+    # Validation si on a au moins un champ vide
+    if liste_validation['champ_titre_vide'] or liste_validation['champ_paragraphe_vide'] or \
+            liste_validation['champ_date_vide'] or liste_validation['champ_identifiant_vide'] or \
+            liste_validation['champ_auteur_vide']:
+        liste_validation['champs_vides'] = True
+
+    if not liste_validation['champs_vides']:
+        # Seulement si les champs ne sont pas vide, qu'on va poursuivre les validations de manière logique
+        if liste_champs['paragraphe'] == liste_champs['paragraphe_avant']:
+            liste_validation['champ_paragraphe_pareil'] = True
+
+        if liste_champs['titre'] == liste_champs['titre_avant']:
+            liste_validation['champ_titre_pareil'] = True
+
+        if liste_validation['champ_paragraphe_pareil'] and liste_validation['champ_titre_pareil']:
+            liste_validation['aucune_modification'] = True
+            # On calcul les validités sur les longueurs des champs
+
+    return liste_validation
+
+
+# L'indicateur pour savoir si on continu ou si on arrête se que nous sommes entrains de faire
 def situation_erreur(liste_validation):
     for cle, valeur in liste_validation.items():
         if valeur:
@@ -127,6 +192,8 @@ def message_erreur(liste_validation):
 
 def message_erreur_admin(liste_validation_admin):
     messages = {}
+
+    # Je dois ajouter les situations possible
 
     if liste_validation_admin['champ_titre_vide']:
         messages['champ_titre_vide'] = "Le nouveau titre de l'article ne peut être vide !"

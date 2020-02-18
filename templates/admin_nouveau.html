@@ -7,18 +7,18 @@
         <form action="./article-ajout" method="post">
             <div class="modif">
                 <div class="information">
-                    <label for="nom_article">Titre de l'article :</label>
+                    <label for="ajout-article">Titre de l'article :</label>
                     <div>
-                        <input id="nom_article" maxlength="15" minlength="3" name="nom_article"
+                        <input id="ajout_article" maxlength="15" minlength="3" name="nom_article"
                                pattern="[a-z0-9 -'A-Z]{3,15}" required type="text"
                                title="Charactères alphanumériques permis entre 3 à 15 charactères">
                         <span class="obligatoire">&nbsp;*</span>
                     </div>
                 </div>
                 <div class="information">
-                    <label for="identifiant">Identifiant :</label>
+                    <label for="ajout_identifiant">Identifiant :</label>
                     <div>
-                        <input id="identifiant" maxlength="15" minlength="3" name="identifiant"
+                        <input id="ajout_identifiant" maxlength="15" minlength="3" name="identifiant"
                                pattern="[a-z0-9A-Z]{3,15}" required
                                title="Charactères alphanumériques permis entre 3 à 15 charactères"
                                type="text" value="">
@@ -44,18 +44,17 @@
                     </div>
                 </div>
                 <div class="information">
-                    <label for="nom_paragraphe">Paragraphe :</label>
+                    <label for="ajout_paragraphe">Paragraphe :</label>
                     <div>
-                        <textarea cols="50" id="nom_paragraphe" maxlength="100" minlength="3" name="nom_paragraphe"
-                                  pattern="[0-9a-zA-Z -']{3,100}" required rows="4"
-                                  title="Charactères alphanumériques permis entre 3 à 100 charactères"></textarea>
+                        <textarea cols="50" id="ajout_paragraphe" maxlength="100" minlength="3" name="nom_paragraphe" pattern="[0-9a-zA-Z -']{3,100}" required rows="4"
+                        title="Charactères alphanumériques permis entre 3 à 100 charactères"></textarea>
                         <span class="obligatoire">&nbsp;*</span>
                     </div>
                 </div>
             </div>
             <div class="troisBTN">
                 <input class="bouton" type='submit' value="Ajouter...">
-                <input class="bouton" type='reset' value="Effacer..." onClick="customReset();">
+                <input class="bouton" type='reset' value="Effacer..." onClick="reset_ajout();">
             </div>
             <!-- Section des messages erreurs -->
         </form>

@@ -23,8 +23,8 @@ def home():
             session.clear()
 
     # Initialisation peu importe s'il y a des variabes sessions
-    liste_champs = initial_champ()  # Création de la liste d'information nécessaire
-    liste_validation = initial_champ_validation()  # Création des indicateurs erreurs
+    liste_champs = initial_champ_recherche()  # Création de la liste d'information nécessaire
+    liste_validation = initial_champ_validation_recherche()  # Création des indicateurs erreurs
     conn_db = get_db()
 
     # On vérifi s'il y avait des variables de type session qui aurait été crée part une recherche d'article introuvable
@@ -60,10 +60,10 @@ def home():
 
 @app.route('/recherche', methods=["POST"])
 def recherche_article():
-    liste_champs = initial_champ()  # Création de la liste d'information nécessaire
-    liste_validation = initial_champ_validation()  # Création des indicateurs erreurs
-    liste_champs = remplissage_champs(request.form, liste_champs)
-    liste_validation = validation_champs(liste_champs, liste_validation)
+    liste_champs = initial_champ_recherche()  # Création de la liste d'information nécessaire
+    liste_validation = initial_champ_validation_recherche()  # Création des indicateurs erreurs
+    liste_champs = remplissage_champs_recherche(request.form, liste_champs)
+    liste_validation = validation_champs_recherche(liste_champs, liste_validation)
     conn_db = get_db()
     ensemble_trouve = {}
     if not liste_validation['champ_recher_article_vide']:
@@ -119,8 +119,8 @@ def article_selectionner(identifiant):
 @app.route('/admin', methods=["GET"])
 def admin():
     session.clear()  # On delete les cookies pour éviter d'aller consulter le mauvais article
-    liste_champs = initial_champ()  # Création de la liste d'information nécessaire
-    liste_validation = initial_champ_validation()  # Création des indicateurs erreurs
+    liste_champs = initial_champ_recherche()  # Création de la liste d'information nécessaire
+    liste_validation = initial_champ_validation_recherche()  # Création des indicateurs erreurs
     conn_db = get_db()
     ensembles = conn_db.get_all_articles()
     liste_champs['nb_article'] = len(ensembles)
@@ -172,11 +172,10 @@ def admin_modif_article(identifiant):
 
 @app.route('/admin-modif/article-modification', methods=["POST"])
 def admin_modification_article_en_cours():
-    liste_champs_admin = initial_champ_admin()  # Création de la liste d'information nécessaire
+    liste_champs_admin = initial_champ_admin()
     liste_validation_admin = initial_champ_validation_admin()
-    # On utilise la fonction pour les besoin de l'administrateur
-    liste_champs_admin = remplissage_champs_admin(request, liste_champs_admin, "admin_modif")
-    liste_validation_admin = validation_champs_admin(liste_champs_admin, liste_validation_admin)
+    liste_champs_admin = remplissage_champs_modif_article(request, liste_champs_admin)
+    liste_validation_admin = validation_champs_article(liste_champs_admin, liste_validation_admin)
     liste_validation_admin = situation_erreur(liste_validation_admin)
 
     if liste_validation_admin['situation_erreur'] and liste_validation_admin['aucune_modification']:
@@ -203,28 +202,68 @@ def admin_modification_article_en_cours():
         session['liste_champs_admin'] = liste_champs_admin
 
         return redirect(url_for('.admin_modif_article', identifiant=liste_champs_admin['identifiant']))
+    # il faudrait vérifier si je pourrais faire un seul return
 
 
 @app.route('/admin-nouveau', methods=["GET"])
 def admin_nouveau():
-    # Lorsque nous arrivons ici, on doit supprimer les cookies
-    # ayant pas encore été supprimés car ils ne seront plus nécessaire ici
-    session.clear()
-    page_ajout_article = True  # Seulement ici est sera mise à vrai pour les besoins du formulaire ajout d'article
-    return render_template("admin_nouveau.html", titre="Ajout d'article", page_ajout_article=page_ajout_article)
+    validation_erreur = False  # Ça nous indiquera quels types de messages afficher
+    titre = ""
+    # Seulement ici est sera mise à vrai pour les besoins du formulaire ajout d'article
+    page_ajout_article = True
+    # Lorsque nous arrivons ici, on doit supprimer les cookies sauf s'il y en a
+    if not session.get('tentative_ajout'):
+        session.clear()
+        # Je dois les mettre par défault
+        liste_champs_admin = initial_champ_admin()
+        liste_validation_admin = initial_champ_validation_admin()
+        titre = "Ajout d'article"
+    else:
+        liste_champs_admin = session['liste_champs_admin']
+        liste_validation_admin = session['liste_validation_admin']
+        if session.get('situation_erreur') and session['situation_erreur']:
+            titre = "Ajout en Erreur !"
+            validation_erreur = True
+
+        if session.get('ajout_reussi') and session['ajout_reussi']:
+            titre = "Ajout réussi !"
+
+    return render_template("admin_nouveau.html", liste_validation_admin=liste_validation_admin,
+                           liste_champs_admin=liste_champs_admin, titre=titre, page_ajout_article=page_ajout_article)
 
 
-@app.route('/admin-nouveau/article_ajout', methods=["POST"])
+@app.route('/admin-nouveau/article-ajout', methods=["POST"])
 def admin_nouveau_ajout():
     conn_db = get_db()
-    liste_champs_admin = initial_champ_admin()  # Création de la liste d'information nécessaire
+    liste_champs_admin = initial_champ_admin()
     liste_validation_admin = initial_champ_validation_admin()
-    liste_champs_admin = remplissage_champs_admin(request, liste_champs_admin, "admin_nouveau")
+    liste_champs_admin = remplissage_champs_ajout_article(request, liste_champs_admin)
     article_verifier = conn_db.get_articles_selectionner(liste_champs_admin['identifiant'])
     if len(article_verifier) > 0:
         liste_validation_admin['identifiant_deja_prise'] = True
 
-    return "Allo"
+    liste_validation_admin = validation_champs_article(liste_champs_admin, liste_validation_admin)
+    liste_validation_admin = situation_erreur(liste_validation_admin)
+
+    if not liste_validation_admin['situation_erreur']:
+        conn_db.ajouter_article(liste_champs_admin['date_publication'], liste_champs_admin['titre'],
+                                liste_champs_admin['paragraphe'], liste_champs_admin['identifiant'],
+                                liste_champs_admin['auteur'])
+        liste_validation_admin['ajout_reussi'] = True
+        session['ajout_reussi'] = True
+        session['situation_erreur'] = False
+
+    else:
+        session['situation_erreur'] = True
+        session['ajout_reussi'] = False
+
+    liste_champs_admin['messages'] = message_erreur_admin(liste_validation_admin)
+    # Seulement ici est sera mise à vrai pour les besoins du formulaire ajout d'article
+    session['tentative_ajout'] = True
+    session['liste_champs_admin'] = liste_champs_admin
+    session['liste_validation_admin'] = liste_validation_admin
+
+    return redirect(url_for('.admin_nouveau'))
 
 
 @app.route('/article/')
