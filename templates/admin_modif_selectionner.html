@@ -25,7 +25,7 @@
     </div>
     <h2>Section modifiable de l'article</h2>
     <div class='zone_article_recent'>
-        <form action="./article_modification" method="post">
+        <form action="./article-modification" method="post">
             <div class="modif">
                 {% set champ = '' %}
                 {% if liste_validation_admin['aucune_modification'] or liste_validation_admin['champ_titre_vide'] %}
@@ -50,7 +50,7 @@
                     <label for="nom_paragraphe">Paragraphe :</label>
                     <div>
                         <textarea cols="50" id="nom_paragraphe" maxlength="100" minlength="3" name="nom_paragraphe"
-                                  required rows="4" pattern="[0-9a-zA-Z -']{3,100}"
+                                  pattern="[0-9a-zA-Z -']{3,100}" required rows="4"
                                   title="charactères alphanumériques permis entre 3 à 100 charactères">{{article_a_modifier['paragraphe']}}
                         </textarea>
                         <span class="obligatoire">&nbsp;*</span>
@@ -58,13 +58,13 @@
                 </div>
             </div>
             <input name="identifiant" type="hidden" value="{{article_a_modifier['identifiant']}}">
-            <input name="auteur" type="hidden" value="{{article_a_modifier['auteur']}}">
+            <input name="nom_auteur" type="hidden" value="{{article_a_modifier['auteur']}}">
             <input name="date_publication" type="hidden" value="{{article_a_modifier['date_publication']}}">
             <input name="nom_article_avant" type="hidden" value="{{article_a_modifier['titre']}}">
             <input name="nom_paragraphe_avant" type="hidden" value="{{article_a_modifier['paragraphe']}}">
             <div class="troisBTN">
                 <input class="bouton" type='submit' value="Modifier...">
-                <input class="bouton" type='reset' value="Effacer..." onClick="customReset();">
+                <input class="bouton" onClick="customReset();" type='reset' value="Effacer...">
             </div>
             {% if liste_validation_admin['situation_erreur'] and validation_erreur %}
             {% for cle, valeur in article_a_modifier['messages'].items() %}

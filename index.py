@@ -170,7 +170,7 @@ def admin_modif_article(identifiant):
         return redirect(url_for('.admin_modif_inexistant'))
 
 
-@app.route('/admin-modif/article_modification', methods=["POST"])
+@app.route('/admin-modif/article-modification', methods=["POST"])
 def admin_modification_article_en_cours():
     liste_champs_admin = initial_champ_admin()  # Création de la liste d'information nécessaire
     liste_validation_admin = initial_champ_validation_admin()
@@ -224,7 +224,6 @@ def admin_nouveau_ajout():
     if len(article_verifier) > 0:
         liste_validation_admin['identifiant_deja_prise'] = True
 
-    print(liste_validation_admin['identifiant_deja_prise'])
     return "Allo"
 
 

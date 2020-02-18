@@ -19,10 +19,10 @@
     
     <link href="/css/biblio.css" rel="stylesheet" type="text/css">
     
-    <!-- Ici , on va détemriner si on a besoin de la feuille de style date.css.
+    <!-- Ici , on va déterminer si on a besoin de la feuille de style date.css.
         Elle sera utile seulement si on est sur la route /admin-nouveau -->
     {% if page_ajout_article %}
-    <link href="/css/date.css" rel="stylesheet" type="text/css">
+    <link href="/vendor/css/date.css" rel="stylesheet" type="text/css">
     {% endif %}
     
     {% if titre %}
@@ -38,7 +38,7 @@
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="//cdn.jsdelivr.net/webshim/1.14.5/polyfiller.js"></script>
-    <script src="/js/date.js"></script>
+    <script src="/vendor/js/date.js"></script>
     {% endif %}
     <script src="/js/admin.js"></script>
 </body>

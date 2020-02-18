@@ -48,15 +48,19 @@ def remplissage_champs(formulaire, liste_champs):
 
 
 def remplissage_champs_admin(request, liste_champs_admin, route):
+    print(route)
+    # Cette condition est pour seulement lorsqu'on ajoute un article
+    if route == "admin_nouveau":
+        pass
+    # liste_champs_admin['date_publication'] = request.form['date']
+
     liste_champs_admin['titre'] = request.form['nom_article']
     # Je dois utiliser strip pour retirer les retours de lignes non nécessaire
     liste_champs_admin['paragraphe'] = request.form['nom_paragraphe'].strip()
     liste_champs_admin['identifiant'] = request.form['identifiant']
-    liste_champs_admin['date_publication'] = request.form['date_publication']
-    liste_champs_admin['auteur'] = request.form['auteur']
+    liste_champs_admin['auteur'] = request.form['nom_auteur']
 
-    # Cette condition est pour éviter de la répétition de code avec le remplissage des informations venant de la route
-    # /admin-nouveau/article_ajout'
+    # Cette condition est pour seulement lorsqu'on modifier un article
     if route == "admin_modif":
         liste_champs_admin['titre_avant'] = request.form['nom_article_avant']
         liste_champs_admin['paragraphe_avant'] = request.form['nom_paragraphe_avant']

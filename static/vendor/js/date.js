@@ -1,3 +1,4 @@
+// Modification du fichier original pour franciser les termes...
 document.addEventListener('DOMContentLoaded', function (event) {
     webshim.setOptions('forms-ext', {
         replaceUI: 'auto'
@@ -50,11 +51,11 @@ document.addEventListener('DOMContentLoaded', function (event) {
             ",": ","
         },
         "numberSigns": ".",
-        "dateSigns": "/",
+        "dateSigns": "-",
         "timeSigns": ":. ",
-        "dFormat": "/",
+        "dFormat": "-",
         "patterns": {
-            "d": "yy/mm/dd"
+            "d": "yy-mm-dd"
         },
         "month": {
             "currentText": "Ce mois ci"
