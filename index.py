@@ -230,8 +230,7 @@ def admin_nouveau():
             titre = "Ajout réussi !"
 
     return render_template("admin_nouveau.html", liste_validation=liste_validation,
-                           validation_erreur=validation_erreur, liste_champs=liste_champs, titre=titre,
-                           page_ajout_article=page_ajout_article)
+                           validation_erreur=validation_erreur, liste_champs=liste_champs, titre=titre)
 
 
 @app.route('/admin-nouveau/article-ajout', methods=["POST"])

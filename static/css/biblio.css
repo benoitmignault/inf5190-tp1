@@ -88,6 +88,7 @@ h2 {
     text-align:center;
 }
 
+.container > .zone_article_recent > form > div > div > div > input[type=date],
 .container > .zone_article_recent > form > div > div > div > textarea,
 .container > .zone_article_recent > form > div > div > div > input[type=text],
 .container > form > .zone_recherche > div > input[type=search]{
@@ -97,6 +98,10 @@ h2 {
     margin-top: 6px;
     margin-bottom: 5px;
     margin-right: 10px;
+}
+
+.container > .zone_article_recent > form > div > div > div > input[type=date]{
+    width: 189px;
 }
 
 .container > .zone_article_recent > form > .succes,
