@@ -19,7 +19,7 @@ class Database:
     def get_articles_recents(self):
         date_auj = date.today()
         cursor = self.get_connection().cursor()
-        select = "select titre, identifiant, auteur, date_publication, paragraphe "
+        select = "select auteur, date_publication, identifiant, paragraphe, titre "
         fromm = "from article "
         where = "where date_publication <=? "
         order_by = "order by date_publication desc"
@@ -27,11 +27,13 @@ class Database:
         cursor.execute(sql, (date_auj,))
         result = cursor.fetchall()
         ensemble = {}  # L'ensemble des articles jusqu'à un max de 5 des plus récents
+        i = 0
         if result is not None:
             for un_article in result:
-                sous_ensemble = {'titre': un_article[0], 'identifiant': un_article[1], 'auteur': un_article[2],
-                                 'date_publication': un_article[3], 'paragraphe': un_article[4]}
-                ensemble[un_article[1]] = sous_ensemble
+                sous_ensemble = {'auteur': un_article[0], 'date_publication': un_article[1],
+                                 'identifiant': un_article[2], 'paragraphe': un_article[3], 'titre': un_article[4]}
+                ensemble[i] = sous_ensemble
+                i += 1
 
         return ensemble
 
@@ -57,7 +59,7 @@ class Database:
     # Sera utiliser avec la route /article/<identifiant»
     def get_articles_selectionner(self, identifiant):
         cursor = self.get_connection().cursor()
-        select = "select titre, identifiant, auteur, date_publication, paragraphe "
+        select = "select auteur, date_publication, identifiant, paragraphe, titre "
         fromm = "from article "
         where = "where identifiant = ?"
         sql = select + fromm + where
@@ -66,8 +68,8 @@ class Database:
         ensemble_trouve = {}  # L'ensemble des articles jusqu'à un max de 5 des plus récents
 
         if result is not None:
-            ensemble_trouve = {'titre': result[0], 'identifiant': result[1], 'auteur': result[2],
-                               'date_publication': result[3], 'paragraphe': result[4]}
+            ensemble_trouve = {'auteur': result[0], 'date_publication': result[1], 'identifiant': result[2],
+                               'paragraphe': result[3], 'titre': result[4]}
 
         return ensemble_trouve
 

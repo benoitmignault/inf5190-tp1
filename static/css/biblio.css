@@ -250,23 +250,13 @@ h2 {
 
 .container > .return{
     width: 100%;
+    display: -webkit-flex;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .container > .return > .desktop {
-    border-radius: 10px;
-    display: block;
-    color: black;
-    text-decoration: none;
-    background-color: darkgrey;
-    font-size: 18px;
-    font-weight: bold;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    width: 40px;
     text-align: center;
-}
-
-.container > .return > .desktop:hover {
-    background-color: black;
-    color: red;
-    cursor: pointer;
 }

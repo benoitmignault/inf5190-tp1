@@ -60,7 +60,7 @@ def initial_champ_validation_admin():
                               "champs_vides": False, "champ_titre_vide": False, "champ_paragraphe_vide": False,
                               "champ_date_vide": False, "champ_identifiant_vide": False,
                               "champ_auteur_vide": False, "identifiant_deja_prise": False,
-                              "longueur_article_inv": False, "longueur_paragraphe_inv": False,
+                              "longueur_paragraphe_inv": False,
                               "longueur_titre_inv": False, "longueur_auteur_inv": False,
                               "longueur_identifiant_inv": False, "champ_date_inv": False, "ajout_reussi": False}
 
@@ -117,7 +117,7 @@ def validation_champs_article(liste_champs, liste_validation):
     if liste_champs['paragraphe'] == "":
         liste_validation['champ_paragraphe_vide'] = True
 
-    elif not (3 <= len(liste_champs['paragraphe']) <= 100):
+    elif not (10 <= len(liste_champs['paragraphe']) <= 100):
         liste_validation['longueur_paragraphe_inv'] = True
 
     # https://stackoverflow.com/questions/41129921/validate-an-iso-8601-datetime-string-in-python
@@ -208,23 +208,41 @@ def message_erreur_admin(liste_validation):
 
 
 def message_erreur_admin_ajout(liste_validation):
-    """
-    liste_validation_admin =
-    {
-    "update_reussi": False, "aucune_modification": False, "champ_paragraphe_pareil": False,
-    "champs_vides": False, "champ_titre_vide": False, "champ_paragraphe_vide": False,
-    "champ_date_vide": False, "champ_identifiant_vide": False,
-    "champ_auteur_vide": False, "identifiant_deja_prise": False,
-    "longueur_article_inv": False, "longueur_paragraphe_inv": False,
-    "longueur_titre_inv": False, "longueur_auteur_inv": False,
-    "longueur_identifiant_inv": False, "champ_date_inv": False, "ajout_reussi": False}
-    """
     messages = []
     if liste_validation['ajout_reussi']:
         messages.append("L'ajout de l'article a fonctionné !")
-
     else:
         if liste_validation['identifiant_deja_prise']:
             messages.append("Attention ! L'identifiant existe déjà, veuiller en choisir un autre !")
+
+        if liste_validation['champ_titre_vide']:
+            messages.append("Attention ! Le titre ne peut être vide !")
+
+        if liste_validation['champ_paragraphe_vide']:
+            messages.append("Attention ! Le paragraphe  ne peut être vide !")
+
+        if liste_validation['champ_date_vide']:
+            messages.append("Attention ! La date de publication ne peut être vide !")
+
+        if liste_validation['champ_identifiant_vide']:
+            messages.append("Attention ! Le identifiant ne peut être vide !")
+
+        if liste_validation['champ_auteur_vide']:
+            messages.append("Attention ! Un article doit être associer à un auteur !")
+
+        if liste_validation['longueur_paragraphe_inv']:
+            messages.append("Attention ! La longueur du paragraphe doit être entre 10 et 100 caractères !")
+
+        if liste_validation['longueur_titre_inv']:
+            messages.append("Attention ! Le titre de l'article doit être entre 3 et 15 caractères !")
+
+        if liste_validation['longueur_auteur_inv']:
+            messages.append("Attention ! L'auteur de l'article doit être entre 3 et 15 caractères !")
+
+        if liste_validation['longueur_identifiant_inv']:
+            messages.append("Attention ! L'identifiant doit être entre 3 et 15 caractères !")
+
+        if liste_validation['champ_date_inv']:
+            messages.append("Attention ! La date saisie n'est pas valide selon le format «AAAA-MM-DD» !")
 
     return messages

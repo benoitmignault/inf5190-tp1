@@ -41,6 +41,19 @@
                 {% if liste_validation['champ_date_vide'] or liste_validation['champ_date_inv'] %}
                 {% set champ = 'erreur' %}
                 {% endif %}
+                <!--
+                jQuery JavaScript Library v3.4.1
+                https://jquery.com/
+                
+                Includes Sizzle.js
+                https://sizzlejs.com/
+                
+                Copyright JS Foundation and other contributors
+                Released under the MIT license
+                https://jquery.org/license
+                
+                Date: 2019-05-01T21:04Z
+                -->
                 <div class="information {{champ}}">
                     <label for="ajout_date">Date de publication :</label>
                     <div class="form-row animate-2">
@@ -72,7 +85,7 @@
                     <label for="ajout_paragraphe">Paragraphe :</label>
                     <div>
                         <textarea cols="50" id="ajout_paragraphe" maxlength="100"
-                                  minlength="3" name="nom_paragraphe" required rows="4"
+                                  minlength="10" name="nom_paragraphe" required rows="4"
                                   title="Charactères alphanumériques permis entre 3 à 100 charactères">{{liste_champs['paragraphe']}}</textarea>
                         <span class="obligatoire">&nbsp;*</span>
                     </div>
@@ -105,8 +118,9 @@
             <a class="bouton" href="/admin">Afficher tous les articles</a>
         </div>
     </div>
-     <div class="return">
-        <a class="desktop" href="#hautPageDesktop">Haut de la page</a>
+     <!-- https://publicdomainvectors.org/fr/gratuitement-des-vecteurs/Orange-fl%C3%A8che-pointant-vers-le-haut-de-dessin-vectoriel/9499.html -->
+    <div class="return">
+        <a class="desktop" href="#hautPageDesktop"><img src="/img/fleche_haut.svg" alt="Retour vers le haut"></a>
     </div>
 </div>
 {% endblock content %}

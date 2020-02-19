@@ -1,96 +1,24 @@
+/*
+jQuery JavaScript Library v3.4.1
+https://jquery.com/
+
+Includes Sizzle.js
+https://sizzlejs.com/
+
+Copyright JS Foundation and other contributors
+Released under the MIT license
+https://jquery.org/license
+
+Date: 2019-05-01T21:04Z
+*/
 /* Modification du fichier original pour adapter le style a ma sauce a moi... */
-.wrapper {
-    margin: 10px auto;
-    padding: 5px 10px;
-    max-width: 600px;
-    min-width: 300px;
-    width: 90%;
-}
-
-label {
-    display: block;
-    margin: 3px 0;
-}
-
-label:hover {
-    color: blue;
-    cursor: pointer;
-}
-/* Ajustement de la longueur manuellement pour la faire fitter avec les autres input */
 .form-row input {
     width: 189px;
     margin-right: 10px
 }
 
-.currency-style input {
-    text-align: right;
-}
-
-[class*="animate-"] .ws-popover {
-    overflow: visible;
-}
-
-[class*="animate-"] .ws-popover.ws-po-visible .ws-po-outerbox {
-    opacity: 1;
-    -webkit-transform: translate(0, 0) scale(1);
-    transform: translate(0, 0) scale(1);
-}
-
-.animate-2 .ws-popover {
-    overflow: visible;
-    -webkit-perspective: 600px;
-    -webkit-transform-style: preserve-3d;
-    perspective: 600px;
-    transform-style: preserve-3d;
-}
-
-.animate-2 .ws-po-outerbox {
-    -webkit-transform: rotateX(-60deg);
-    -webkit-transform-origin: 50% 0 0;
-    transform: rotateX(-60deg);
-    transform-origin: 50% 0 0;
-}
-
-.animate-2 [data-vertical="bottom"] .ws-po-outerbox {
-    -webkit-transform: rotateX(60deg);
-    -webkit-transform-origin: -50% 100% 0;
-    transform-origin: -50% 100% 0;
-    transform: rotateX(60deg);
-}
-
-.ws-date {
-    margin-top: 6px;
-    margin-bottom: 16px;
-}
-
-.input-buttons {
-    margin-top: 10px;
-}
-
-.container > form > .formulaire_joueur .joueur > select {
-    padding: 5px;
-    width: 75%;
-    border-radius: 10px;
-}
-
-.container > form > .formulaire_joueur > .date {
-    width: 33%;
-}
-
-.container > form > .formulaire_joueur > .date > div > .ws-date,
-.container > form > .formulaire_joueur > .date > div > .ws-inputreplace,
-.container > form > .formulaire_joueur > .date > div > .wsshadow-1580265856799,
-.container > form > .formulaire_joueur > .date > div > .has-input-buttons {
-    width: 100%;
-    border-radius: 10px;
-    padding: 5px;
-    border: 1px solid #ccc;
-    margin-top: 6px;
-    margin-bottom: 16px;
-    resize: vertical;
-}
-
 .input-button-size-2 {
+    margin-top: 10px;
     margin-left: -50px;
 }
 
