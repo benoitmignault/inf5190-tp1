@@ -23,3 +23,9 @@ function reset_ajout(){
     ajout_paragraphe.defaultValue = "";
     ajout_date.defaultValue = null;
 }
+
+$(ajout_date).on("change", function() {
+    this.setAttribute("data-date", moment(this.value, "YYYY-MM-DD")
+        .format( this.getAttribute("data-date-format") )
+    )
+}).trigger("change")

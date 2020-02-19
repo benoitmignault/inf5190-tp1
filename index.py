@@ -46,7 +46,6 @@ def home():
     else:
         ensemble_recent = conn_db.get_articles_recents()
 
-    print(ensemble_recent)
     # On peut maintenant calculer le nombre d'articles récents trouvé peu importe d'où vient l'ensemble récent
     liste_champs['nb_article_recent'] = len(ensemble_recent)
     if liste_champs['nb_article_recent'] == 0:

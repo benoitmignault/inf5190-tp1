@@ -104,6 +104,11 @@ h2 {
     width: 189px;
 }
 
+input[type=date]::-webkit-inner-spin-button,
+input[type=date]::-webkit-clear-button{
+    display: none;
+}
+
 .container > .zone_article_recent > form > .succes,
 .container > .zone_article_recent > form > .aucun,
 .container > .aucun,
