@@ -17,32 +17,27 @@ def close_connection(exception):
 
 @app.route('/', methods=["GET"])
 def home():
-    # Si indicateur est vrai, on détruit les cookies, sinon on fait rien de spécial
     if session.get('reset_cookie'):
         if session['reset_cookie']:
             session.clear()
 
-    # Initialisation peu importe s'il y a des variabes sessions
-    liste_champs = initial_champ_recherche()  # Création de la liste d'information nécessaire
-    liste_validation = initial_champ_validation_recherche()  # Création des indicateurs erreurs
+    liste_champs = initial_champ_recherche()
+    liste_validation = initial_champ_validation_recherche()
     conn_db = get_db()
 
-    # On vérifi s'il y avait des variables de type session qui aurait été crée part une recherche d'article introuvable
-    # On commence par le titre
     if session.get('titre'):
         titre = session['titre']
     else:
         titre = "Présentation"
 
-    # On doit valider si j'ai cette indicateur à True
     if session.get('aucun_article_trouve'):
         liste_validation['aucun_article_trouve'] = True
 
-    # On poursuit pour vérifier s'il y avait un ensemble qu'on avait préalablement récupérer
     if session.get('ensemble_recent'):
         # Et si on a un ensemble trouvé, ce qui veut dire que nous n'avons pas trouvé article
         ensemble_recent = session['ensemble_recent']
-        # Comprendre pourquoi il y a un double triage lorsque je reviens d'une recherche qui a rien donnée
+        liste_champs = session['liste_champs']
+
     else:
         ensemble_recent = conn_db.get_articles_recents()
 
@@ -54,6 +49,7 @@ def home():
     liste_validation = situation_erreur(liste_validation)
     liste_champs['messages'] = message_erreur(liste_validation)
 
+    print(liste_champs['recher_article'])
     return render_template('home.html', titre=titre, liste_validation=liste_validation,
                            ensemble_recent=ensemble_recent, liste_champs=liste_champs)
 
@@ -73,9 +69,11 @@ def recherche_article():
         if liste_champs['nb_article_trouve'] == 0:
             liste_validation['aucun_article_trouve'] = True
 
+    session['liste_champs'] = liste_champs
     liste_validation = situation_erreur(liste_validation)
     if liste_validation['situation_erreur']:
         ensemble_recent = conn_db.get_articles_recents()
+
         session['titre'] = "Problème avec la recherche !"
         session['ensemble_recent'] = ensemble_recent
         session['aucun_article_trouve'] = liste_validation['aucun_article_trouve']
@@ -86,7 +84,7 @@ def recherche_article():
         # les données nécessaire dans le traitement de la route /recherche_article_trouve
         session['titre'] = "Recherche réussi !"
         session['ensemble_trouve'] = ensemble_trouve
-        session['liste_champs'] = liste_champs
+        # session['liste_champs'] = liste_champs
         return redirect(url_for('.recherche_article_trouve'))
 
 

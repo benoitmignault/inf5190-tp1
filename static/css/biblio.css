@@ -213,6 +213,7 @@ input[type=date]::-webkit-clear-button{
     cursor: pointer;
 }
 
+.container > form > .zone_recherche > .article > .erreur,
 .container > .zone_article_recent > form > .modif > .erreur > div > input[type=text],
 .container > .zone_article_recent > form > .modif > .erreur > div > textarea{
     border-color: red;

@@ -7,15 +7,20 @@
     <form action="/recherche" method="post">
         <div class='zone_recherche'>
             <div class="article">
-                <input id="recher_article" maxlength="25" minlength="3" name="recher_article"
+                {% set champ = '' %}
+                {% if liste_validation['aucun_article_trouve'] %}
+                {% set champ = 'erreur' %}
+                {% endif %}
+                <input class="{{champ}}" id="recher_article" maxlength="25" minlength="3" name="recher_article"
                        oninput="setCustomValidity('')"
                        oninvalid="this.setCustomValidity('Le texte recherché doit être entre 3 et 25 caractères')"
                        pattern="[a-zA-Z-_']{3,25}" placeholder="abc"
-                       required title="mot recherché doit faire entre 3 à 25 charactères" type="search" value="">
+                       required title="mot recherché doit faire entre 3 à 25 charactères" type="search"
+                       value="{{liste_champs['recher_article']}}">
             </div>
             <div class="troisBTN">
                 <input class="bouton" type="submit" value="Recherche...">
-                <input class="bouton" type="reset" value="Effacer...">
+                <input class="bouton" type="reset" onClick="reset_recherche();" value="Effacer...">
             </div>
             {% if liste_validation['aucun_article_trouve'] %}
             <p class="aucun">{{liste_champs['messages']['zero_article_trouve']}}</p>
