@@ -1,80 +1,64 @@
-/* Ce css servira au responsible de la page index et english qui sont mes page d'accueuil en français et en anglais*/
+/* Pour des tablettes */
 @media screen and (max-width:768px) {
-    .racineSite{
+    body {
+        background-size: auto;
+        background-repeat: repeat;
+    }
+
+    .container{
         -webkit-flex-direction:column; 
         flex-direction:column; 
         margin: auto;
-    }
-    .racineSite .left, .racineSite .middle, 
-    .racineSite .right{
-        width: 100%; 
-    }
-    .racineSite .right .logoRight{
-        display: none;
-    }    
-    .right #photoCell{
-        display:block;
-    }
-    .middle .return .cellulaire, .cellulaire{
-        display:block;
-    }
-    .middle .return .desktop, .desktop{
-        display:none;
-    }
-    .middle .header{        
-        flex-direction: column;        
         width: 100%;
     }
-    .middle .header > div{
-        width: 100%;
-        text-align: center;
-        background-color: darkgrey;    
-        line-height:30px;
-        font-size:16px;
+
+    .container > .zone_article_recent > form > div > div > div > input[type=text],
+    .container > .zone_article_recent > form > div > div > div > input[type=date],
+    .container > .zone_article_recent > form > div > div > div > textarea{
+        width: 50%
     }
-    .middle .center .header .unePassionPhoto {
-        width: 100%;
+}
+
+/* Pour des écrans petits du genre un Iphone / Samsung */
+@media screen and (max-width:400px) {
+    .container > .zone_article_recent > .tabeau_article .cle{
+        width: 45%;
     }
-    .middle .center ul{
-        margin-left: 0px; 
+
+    .container > .zone_article_recent > .admin_modif > .bouton,
+    .container > .zone_admin > .admin > .bouton,
+    .container > .zone_admin > .admin,
+    .container > form > .zone_recherche > div,
+    .container > form > .zone_recherche > .article > input[type=search],
+    .container > .zone_article_recent > form > div > div > div > input[type=text],
+    .container > .zone_article_recent > form > div > div > div > input[type=date],
+    .container > .zone_article_recent > form > div > div > div > textarea{
+        width: 100%
     }
-    .middle .photo > .sous_photo{        
-        -webkit-flex-direction:column; 
-        flex-direction:column;
-        width: 100%;    
+
+    .container > .zone_admin > .admin > .bouton:first-of-type,
+    .container > form > .zone_recherche > .article > input[type=search]{
+        margin-bottom: 15px;
     }
-    .middle .cheminement > tbody > tr > .nomcours{
-        font-size: 0.775em;        
+
+    .container > .zone_admin > .admin > .seul:first-of-type{
+        margin-bottom: 0px;
     }
-    .middle .center > .passionResize,
-    .middle .center > .passionResize > .passion{
-        display: flex; 
+
+    .container > .zone_admin > .admin > .bouton{
+        margin-right: 0px;
+    }
+
+    .container > .zone_admin > .admin,
+    .container > form > .zone_recherche > .troisBTN,
+    .container > .zone_article_recent > form > .troisBTN {
         display: -webkit-flex;
-        flex-direction: column;
-        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
-    .middle .photo .sous_photo .unePassionPhoto{
-        width: 100%;       
-        padding-left: 25px;
-        padding-right: 25px;
-    }
-    .middle .photo{        
-        font-size: 15.5px;
-    }
-    .formulaire > .droite{
-        flex-direction: column; /* Les div enfants de formulaire seront l'un en dessous de l'autre*/
-        -webkit-flex-direction:column;
-    }
-    #msg, input[type="text"], input[type="email"]{
-        width: 100%;     
-    }
-    label{
-        text-align: left;
-        width: 100%;
-    }
-    .msgErr{
-        margin-left: 5px; 
-        margin-top: 0px;
-        padding-left: 15px;
+
+    .container > .zone_admin > .admin{
+        flex-wrap: wrap;
     }
 }

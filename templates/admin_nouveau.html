@@ -44,8 +44,8 @@
                 <div class="information {{champ}}">
                     <label for="ajout_date">Date de publication :</label>
                     <div>
-                        <input id="ajout_date" type="date" name="date" value="{{liste_champs['date_publication']}}"
-                               required="">
+                        <input id="ajout_date" name="date" required="" type="date"
+                               value="{{liste_champs['date_publication']}}">
                         <span class="obligatoire">&nbsp;*</span>
                     </div>
                 </div>
@@ -95,18 +95,18 @@
     <h2>Section pour tous</h2>
     <div class='zone_admin'>
         <div class="admin">
-            <a class="bouton" href="/">Page D'accueil</a>
+            <a class="bouton seul" href="/">Page D'accueil</a>
         </div>
     </div>
     <h2>Section pour l'administrateur du site</h2>
     <div class='zone_admin'>
         <div class="admin">
-            <a class="bouton" href="/admin">Afficher tous les articles</a>
+            <a class="bouton seul" href="/admin">Afficher tous les articles</a>
         </div>
     </div>
-     <!-- https://publicdomainvectors.org/fr/gratuitement-des-vecteurs/Orange-fl%C3%A8che-pointant-vers-le-haut-de-dessin-vectoriel/9499.html -->
+    <!-- https://publicdomainvectors.org/fr/gratuitement-des-vecteurs/Orange-fl%C3%A8che-pointant-vers-le-haut-de-dessin-vectoriel/9499.html -->
     <div class="return">
-        <a class="desktop" href="#hautPageDesktop"><img src="/img/fleche_haut.svg" alt="Retour vers le haut"></a>
+        <a class="desktop" href="#hautPageDesktop"><img alt="Retour vers le haut" src="/img/fleche_haut.svg"></a>
     </div>
 </div>
 {% endblock content %}

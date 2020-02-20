@@ -1,3 +1,7 @@
+html {
+    scroll-behavior: smooth;
+}
+
 * {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -215,10 +219,9 @@ input[type=date]::-webkit-clear-button{
     background-color: #FCDEDE;
 }
 
-
+.container > form > .zone_recherche > .troisBTN > .bouton,
 .container > .zone_article_recent > form > .troisBTN > .bouton,
 .container > .zone_article_recent > .admin_modif > .bouton,
-.container > form > .zone_recherche > .article > .bouton,
 .container > .zone_admin > .admin > .bouton,
 .container > .zone_article_recent > .tabeau_article > tbody > tr > .valeur > .bouton,
 .container > .zone_404 > .admin > .bouton_404{
@@ -238,6 +241,7 @@ input[type=date]::-webkit-clear-button{
     border: solid #8c711f 3px;
     margin-right: 10px;
     text-decoration: none;
+    text-align: center;
 }
 .container > .zone_404 > .admin > .bouton_404{
     margin-right: 0px;
@@ -246,7 +250,7 @@ input[type=date]::-webkit-clear-button{
 .container > .zone_article_recent > form > .troisBTN > .bouton:hover,
 .container > .zone_article_recent > .admin_modif > .bouton:hover,
 .container > .zone_404 > .admin > .bouton_404:hover,
-.container > form > .zone_recherche > .article > .bouton:hover,
+.container > form > .zone_recherche > .troisBTN > .bouton:hover,
 .container > .zone_admin > .admin > .bouton:hover,
 .container > .zone_article_recent > .tabeau_article > tbody > tr > .valeur > .bouton:hover{
     background: #c7dced;
