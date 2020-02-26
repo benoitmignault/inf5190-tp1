@@ -12,8 +12,9 @@ const nom_auteur = document.querySelector('#ajout_auteur');
 const ajout_paragraphe = document.querySelector('#ajout_paragraphe');
 const ajout_date = document.querySelector('#ajout_date');
 
-// Variable pour effacer les messages erreurs
+// Variable pour effacer les messages
 const aucun = document.querySelector('.aucun');
+const succes = document.querySelector('.succes');
 
 /*
     En fonction où nous sommes, sur le site, la fonction «re_initialiser_tous_champs» sera
@@ -46,7 +47,14 @@ function reset_recherche(){
 }
 
 function effacer_messages_erreurs(){
-    aucun.innerHTML = "";
+    // Nous devons vérifier que les variables ne sont pas égales à «undefined»
+    if (aucun){
+        aucun.innerHTML = "";
+    }
+
+    if (succes){
+        succes.innerHTML = "";
+    }
 }
 
 /*
