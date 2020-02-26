@@ -90,6 +90,7 @@ class Database:
 
         return ensemble
 
+    # Sera utiliser avec la route /admin-modif
     def update_article(self, identifiant, titre, paragraphe):
         connection = self.get_connection()
         update_from = "update article "
@@ -99,6 +100,7 @@ class Database:
         connection.execute(sql, (titre, paragraphe, identifiant))
         connection.commit()
 
+    # Sera utiliser avec la route /admin-nouveau
     def ajouter_article(self, date_publication, titre, paragraphe, identifiant, auteur):
         connection = self.get_connection()
         insert_bd = "insert into article (date_publication, titre, paragraphe, identifiant, auteur) " \

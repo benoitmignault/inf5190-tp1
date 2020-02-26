@@ -248,6 +248,7 @@ def admin_nouveau_ajout():
         conn_db.ajouter_article(liste_champs_admin['date_publication'], liste_champs_admin['titre'],
                                 liste_champs_admin['paragraphe'], liste_champs_admin['identifiant'],
                                 liste_champs_admin['auteur'])
+
         liste_validation_admin['ajout_reussi'] = True
         session['ajout_reussi'] = True
         session['situation_erreur'] = False

@@ -192,7 +192,6 @@ def validation_identifiant(identifiant, liste_validation):
 
 
 def validation_auteur(auteur, liste_validation):
-    # Validation pour l'auteur
     if auteur == "":
         liste_validation['champ_auteur_vide'] = True
 
