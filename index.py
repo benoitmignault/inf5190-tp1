@@ -209,6 +209,7 @@ def admin_nouveau():
     # Seulement ici est sera mise à vrai pour les besoins du formulaire ajout d'article
     page_ajout_article = True
     # Lorsque nous arrivons ici, on doit supprimer les cookies sauf s'il y en a
+    print(session.get('tentative_ajout'))
     if not session.get('tentative_ajout'):
         session.clear()
         # Je dois les mettre par défault
@@ -225,6 +226,7 @@ def admin_nouveau():
         if session.get('ajout_reussi') and session['ajout_reussi']:
             titre = "Ajout réussi !"
 
+    session.clear()  # On va détruire tous les cookies dans l'éventualité que nous allons simplement changer de page
     return render_template("admin_nouveau.html", liste_validation=liste_validation,
                            validation_erreur=validation_erreur, liste_champs=liste_champs, titre=titre)
 
@@ -253,6 +255,7 @@ def admin_nouveau_ajout():
     else:
         session['situation_erreur'] = True
         session['ajout_reussi'] = False
+
     liste_champs_admin['messages'] = message_erreur_admin_ajout(liste_validation_admin)
     # Seulement ici est sera mise à vrai pour les besoins du formulaire ajout d'article
     session['tentative_ajout'] = True
