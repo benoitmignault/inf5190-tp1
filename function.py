@@ -255,49 +255,77 @@ def message_erreur_admin_ajout(liste_validation):
     if liste_validation['ajout_reussi']:
         messages.append("L'ajout de l'article a fonctionné !")
     else:
-        if liste_validation['identifiant_deja_prise']:
-            messages.append("Attention ! L'identifiant existe déjà, veuiller en choisir un autre !")
+        messages = message_erreur_titre(messages, liste_validation)
+        messages = message_erreur_auteur(messages, liste_validation)
+        messages = message_erreur_paragraphe(messages, liste_validation)
+        messages = message_erreur_identifiant(messages, liste_validation)
 
-        if liste_validation['champ_titre_vide']:
-            messages.append("Attention ! Le titre ne peut être vide !")
+    return messages
 
-        if liste_validation['champ_paragraphe_vide']:
-            messages.append("Attention ! Le paragraphe  ne peut être vide !")
 
-        if liste_validation['champ_date_vide']:
-            messages.append("Attention ! La date de publication ne peut être vide !")
+def message_erreur_titre(messages, liste_validation):
+    if liste_validation['champ_titre_vide']:
+        messages.append("Attention ! Le titre ne peut être vide !")
 
-        if liste_validation['champ_identifiant_vide']:
-            messages.append("Attention ! Le identifiant ne peut être vide !")
+    if liste_validation['longueur_titre_inv']:
+        messages.append("Attention ! Le titre de l'article doit être entre 3 et 15 caractères !")
 
-        if liste_validation['champ_auteur_vide']:
-            messages.append("Attention ! Un article doit être associer à un auteur !")
+    if liste_validation['champ_titre_inv']:
+        messages.append("Attention ! le titre de l'article n'est pas valide !")
 
-        if liste_validation['longueur_paragraphe_inv']:
-            messages.append("Attention ! La longueur du paragraphe doit être entre 10 et 100 caractères !")
+    return messages
 
-        if liste_validation['longueur_titre_inv']:
-            messages.append("Attention ! Le titre de l'article doit être entre 3 et 15 caractères !")
 
-        if liste_validation['longueur_auteur_inv']:
-            messages.append("Attention ! L'auteur de l'article doit être entre 3 et 15 caractères !")
+def message_erreur_auteur(messages, liste_validation):
+    if liste_validation['champ_auteur_vide']:
+        messages.append("Attention ! Un article doit être associer à un auteur !")
 
-        if liste_validation['longueur_identifiant_inv']:
-            messages.append("Attention ! L'identifiant doit être entre 3 et 15 caractères !")
+    if liste_validation['champ_auteur_inv']:
+        messages.append("Attention ! le nom de l'auteur n'est pas valide !")
 
-        if liste_validation['champ_date_inv']:
-            messages.append("Attention ! La date saisie n'est pas valide selon le format «AAAA-MM-DD» !")
+    if liste_validation['longueur_auteur_inv']:
+        messages.append("Attention ! L'auteur de l'article doit être entre 3 et 15 caractères !")
 
-        if liste_validation['champ_auteur_inv']:
-            messages.append("Attention ! le nom de l'auteur n'est pas valide !")
+    return messages
 
-        if liste_validation['champ_titre_inv']:
-            messages.append("Attention ! le titre de l'article n'est pas valide !")
 
-        if liste_validation['champ_identifiant_inv']:
-            messages.append("Attention ! l'identifiant unique pour l'article n'est pas valide !")
+def message_erreur_paragraphe(messages, liste_validation):
+    if liste_validation['champ_paragraphe_vide']:
+        messages.append("Attention ! Le paragraphe  ne peut être vide !")
 
-        if liste_validation['champ_paragraphe_inv']:
-            messages.append("Attention ! le contenu du paragraphe de l'article n'est pas valide !")
+    if liste_validation['longueur_paragraphe_inv']:
+        messages.append("Attention ! La longueur du paragraphe doit être entre 10 et 100 caractères !")
+
+    if liste_validation['champ_paragraphe_inv']:
+        messages.append("Attention ! le contenu du paragraphe de l'article n'est pas valide !")
+
+    return messages
+
+
+def message_erreur_identifiant(messages, liste_validation):
+    if liste_validation['identifiant_deja_prise']:
+        messages.append("Attention ! L'identifiant existe déjà, veuiller en choisir un autre !")
+
+    if liste_validation['champ_identifiant_vide']:
+        messages.append("Attention ! Le identifiant ne peut être vide !")
+
+    if liste_validation['longueur_identifiant_inv']:
+        messages.append("Attention ! L'identifiant doit être entre 3 et 15 caractères !")
+
+    if liste_validation['champ_identifiant_inv']:
+        messages.append("Attention ! l'identifiant unique pour l'article n'est pas valide !")
+
+    return messages
+
+
+def message_erreur_date(messages, liste_validation):
+    if liste_validation['champ_date_vide']:
+        messages.append("Attention ! La date de publication ne peut être vide !")
+
+    if liste_validation['champ_date_inv']:
+        messages.append("Attention ! La date saisie n'est pas valide selon le format «AAAA-MM-DD» !")
+
+    if liste_validation['longueur_date_inv']:
+        messages.append("Attention ! L'identifiant doit avoir 10 caractères pas plus pas moins !")
 
     return messages
