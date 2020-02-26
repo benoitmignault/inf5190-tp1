@@ -16,7 +16,7 @@
                     <div>
                         <input id="ajout_article" maxlength="15" minlength="3" name="nom_article"
                                pattern="[a-z0-9 -'A-Z]{3,15}" required
-                               title="Charactères alphanumériques permis entre 3 à 15 charactères"
+                               title="Charactères alphanumériques, les espaces, l'apostrophe et le tiret sont permis"
                                type="text"
                                value="{{liste_champs['titre']}}">
                         <span class="obligatoire">&nbsp;*</span>
@@ -32,7 +32,7 @@
                     <div>
                         <input id="ajout_identifiant" maxlength="15" minlength="3" name="identifiant"
                                pattern="[a-z0-9A-Z]{3,15}" required
-                               title="Charactères alphanumériques permis entre 3 à 15 charactères"
+                               title="Charactères alphanumériques seulement permis"
                                type="text" value="{{liste_champs['identifiant']}}">
                         <span class="obligatoire">&nbsp;*</span>
                     </div>
@@ -44,8 +44,9 @@
                 <div class="information {{champ}}">
                     <label for="ajout_date">Date de publication :</label>
                     <div>
-                        <input id="ajout_date" name="date" required="" type="date"
-                               value="{{liste_champs['date_publication']}}">
+                        <input id="ajout_date" maxlength="10" minlength="10" name="date"
+                               pattern="([0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])" placeholder="AAAA-MM-DD"
+                               required="" type="text" value="{{liste_champs['date_publication']}}">
                         <span class="obligatoire">&nbsp;*</span>
                     </div>
                 </div>
@@ -58,7 +59,7 @@
                     <div>
                         <input id="ajout_auteur" maxlength="15" minlength="3" name="nom_auteur"
                                pattern="[a-zA-Z -']{3,15}" required
-                               title="Charactères alphabétique seulement 3 à 15 charactères"
+                               title="Charactères alphabétique, les espaces, l'apostrophe et le tiret sont permis"
                                type="text" value="{{liste_champs['auteur']}}">
                         <span class="obligatoire">&nbsp;*</span>
                     </div>
@@ -72,7 +73,7 @@
                     <div>
                         <textarea cols="50" id="ajout_paragraphe" maxlength="100"
                                   minlength="10" name="nom_paragraphe" required rows="4"
-                                  title="Charactères alphanumériques permis entre 3 à 100 charactères">{{liste_champs['paragraphe']}}</textarea>
+                                  title="Charactères alphanumériques, les signes de ponctuations sont permis">{{liste_champs['paragraphe']}}</textarea>
                         <span class="obligatoire">&nbsp;*</span>
                     </div>
                 </div>

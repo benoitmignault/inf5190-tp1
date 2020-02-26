@@ -5,6 +5,10 @@ from flask import g
 from .database import Database  # Importer le fichier database.py
 
 PATTERN_DATE = "^([0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])$"  # Ce pattern est pour valider la date
+PATTERN_TITRE = "^[a-z0-9-'A-Z ]{3,15}$"  # Ce pattern est pour valider le titre
+PATTERN_AUTEUR = "^[a-z-'A-Z ]{3,15}$"  # Ce pattern est pour valider l'auteur
+PATTERN_IDENTIFIANT = "^[a-z0-9A-Z]{3,15}$"  # Ce pattern est pour valider l'identifiant
+PATTERN_PARAGRAPHE = "^[a-z0-9-'A-Z @_!#$%^&*()<>?/\\|}{~:]{10,100}$"  # Ce pattern est pour valider le paragraphe
 
 
 def get_db():
@@ -53,25 +57,22 @@ def initial_champ_admin():
 
 
 # Cette fonction sera utiliser pour les modifications et ajout des articles
-
 def initial_champ_validation_admin():
     liste_validation_admin = {"situation_erreur": False, "champ_titre_pareil": False, "champs_pareils": False,
                               "update_reussi": False, "aucune_modification": False, "champ_paragraphe_pareil": False,
                               "champs_vides": False, "champ_titre_vide": False, "champ_paragraphe_vide": False,
-                              "champ_date_vide": False, "champ_identifiant_vide": False,
-                              "champ_auteur_vide": False, "identifiant_deja_prise": False,
-                              "longueur_paragraphe_inv": False,
-                              "longueur_titre_inv": False, "longueur_auteur_inv": False,
-                              "longueur_identifiant_inv": False, "champ_date_inv": False, "ajout_reussi": False}
+                              "champ_date_vide": False, "champ_identifiant_vide": False, "champ_auteur_vide": False,
+                              "identifiant_deja_prise": False, "champ_paragraphe_inv": False,
+                              "longueur_date_inv": False,
+                              "longueur_paragraphe_inv": False, "champ_titre_inv": False, "champ_auteur_inv": False,
+                              "champ_identifiant_inv": False, "longueur_titre_inv": False, "longueur_auteur_inv": False,
+                              "longueur_identifiant_inv": False, "champ_date_inv": False, "ajout_reussi": False
+                              }
 
     return liste_validation_admin
 
 
 # J'ai décidé de séparer mes fonction de remplissages comme ce n'est pas les mêmes champs qui seront utilisés
-
-# Fonction utiliser lors de modifier les articles
-
-
 # Fonction utiliser lors de modification articles
 # liste_champs représente ceux du fichier index.py liste_champs_admin
 def remplissage_champs_modif_article(request, liste_champs):
@@ -108,37 +109,60 @@ def validation_champs_article(liste_champs, liste_validation):
     if liste_champs['titre'] == "":
         liste_validation['champ_titre_vide'] = True
 
-    elif not (3 <= len(liste_champs['titre']) <= 15):
-        liste_validation['longueur_titre_inv'] = True
+    else:
+        if not (3 <= len(liste_champs['titre']) <= 15):
+            liste_validation['longueur_titre_inv'] = True
+
+        match_titre = re.compile(PATTERN_TITRE).match
+        if match_titre(liste_champs['titre']) is None:
+            liste_validation['champ_titre_inv'] = True
 
     # Validation pour le paragraphe    
     if liste_champs['paragraphe'] == "":
         liste_validation['champ_paragraphe_vide'] = True
 
-    elif not (10 <= len(liste_champs['paragraphe']) <= 100):
-        liste_validation['longueur_paragraphe_inv'] = True
+    else:
+        if not (10 <= len(liste_champs['paragraphe']) <= 100):
+            liste_validation['longueur_paragraphe_inv'] = True
+
+        match_paragraphe = re.compile(PATTERN_PARAGRAPHE).match
+        if match_paragraphe(liste_champs['paragraphe']) is None:
+            liste_validation['champ_paragraphe_inv'] = True
 
     # Validation pour la date    
     if liste_champs['date_publication'] == "":
         liste_validation['champ_date_vide'] = True
     else:
-        match_iso8601 = re.compile(PATTERN_DATE).match
-        if match_iso8601(liste_champs['date_publication']) is None:
+        if not (len(liste_champs['date_publication']) == 10):
+            liste_validation['longueur_date_inv'] = True
+
+        match_date = re.compile(PATTERN_DATE).match
+        if match_date(liste_champs['date_publication']) is None:
             liste_validation['champ_date_inv'] = True
 
     # Validation pour l'identifiant
     if liste_champs['identifiant'] == "":
         liste_validation['champ_identifiant_vide'] = True
 
-    elif not (3 <= len(liste_champs['identifiant']) <= 15):
-        liste_validation['longueur_identifiant_inv'] = True
+    else:
+        if not (3 <= len(liste_champs['identifiant']) <= 15):
+            liste_validation['longueur_identifiant_inv'] = True
 
-        # Validation pour l'auteur
+        match_identifiant = re.compile(PATTERN_IDENTIFIANT).match
+        if match_identifiant(liste_champs['identifiant']) is None:
+            liste_validation['champ_identifiant_inv'] = True
+
+    # Validation pour l'auteur
     if liste_champs['auteur'] == "":
         liste_validation['champ_auteur_vide'] = True
 
-    elif not (3 <= len(liste_champs['auteur']) <= 15):
-        liste_validation['longueur_auteur_inv'] = True
+    else:
+        if not (3 <= len(liste_champs['auteur']) <= 15):
+            liste_validation['longueur_auteur_inv'] = True
+
+        match_auteur = re.compile(PATTERN_AUTEUR).match
+        if match_auteur(liste_champs['auteur']) is None:
+            liste_validation['champ_auteur_inv'] = True
 
     # Validation si on a au moins un champ vide
     if liste_validation['champ_titre_vide'] or liste_validation['champ_paragraphe_vide'] or \
@@ -241,5 +265,17 @@ def message_erreur_admin_ajout(liste_validation):
 
         if liste_validation['champ_date_inv']:
             messages.append("Attention ! La date saisie n'est pas valide selon le format «AAAA-MM-DD» !")
+
+        if liste_validation['champ_auteur_inv']:
+            messages.append("Attention ! le nom de l'auteur n'est pas valide !")
+
+        if liste_validation['champ_titre_inv']:
+            messages.append("Attention ! le titre de l'article n'est pas valide !")
+
+        if liste_validation['champ_identifiant_inv']:
+            messages.append("Attention ! l'identifiant unique pour l'article n'est pas valide !")
+
+        if liste_validation['champ_paragraphe_inv']:
+            messages.append("Attention ! le contenu du paragraphe de l'article n'est pas valide !")
 
     return messages

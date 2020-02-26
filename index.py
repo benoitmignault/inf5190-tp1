@@ -49,7 +49,6 @@ def home():
     liste_validation = situation_erreur(liste_validation)
     liste_champs['messages'] = message_erreur(liste_validation)
 
-    print(liste_champs['recher_article'])
     return render_template('home.html', titre=titre, liste_validation=liste_validation,
                            ensemble_recent=ensemble_recent, liste_champs=liste_champs)
 

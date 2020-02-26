@@ -32,7 +32,7 @@ function reset_ajout(){
     ajout_identifiant.defaultValue = "";
     nom_auteur.defaultValue = "";
     ajout_paragraphe.defaultValue = "";
-    ajout_date.defaultValue = null;
+    ajout_date.defaultValue = "";
     effacer_messages_erreurs();
     re_initialiser_tous_champs("input[type=text]");
     re_initialiser_tous_champs("input[type=date]");
@@ -60,9 +60,3 @@ function re_initialiser_tous_champs(type_champs){
         un_champ.style.background = "white";
     });
 }
-
-$(ajout_date).on("change", function() {
-    this.setAttribute("data-date", moment(this.value, "YYYY-MM-DD")
-        .format( this.getAttribute("data-date-format") )
-    )
-}).trigger("change")
