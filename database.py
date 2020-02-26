@@ -22,7 +22,7 @@ class Database:
         select = "select auteur, date_publication, identifiant, paragraphe, titre "
         fromm = "from article "
         where = "where date_publication <=? "
-        order_by = "order by date_publication desc"
+        order_by = "order by date_publication desc LIMIT 5"
         sql = select + fromm + where + order_by
         cursor.execute(sql, (date_auj,))
         result = cursor.fetchall()
@@ -48,7 +48,7 @@ class Database:
         texte = "%" + texte + "%"
         cursor.execute(sql, (texte, texte))
         result = cursor.fetchall()
-        ensemble_trouve = {}  # L'ensemble des articles jusqu'à un max de 5 des plus récents
+        ensemble_trouve = {}
         if result is not None:
             for un_article_trouvee in result:
                 sous_ensemble = {'titre': un_article_trouvee[0], 'date_publication': un_article_trouvee[1]}
@@ -65,7 +65,7 @@ class Database:
         sql = select + fromm + where
         cursor.execute(sql, (identifiant,))
         result = cursor.fetchone()
-        ensemble_trouve = {}  # L'ensemble des articles jusqu'à un max de 5 des plus récents
+        ensemble_trouve = {}
 
         if result is not None:
             ensemble_trouve = {'auteur': result[0], 'date_publication': result[1], 'identifiant': result[2],
@@ -82,7 +82,7 @@ class Database:
         sql = select + fromm + order_by
         cursor.execute(sql)
         result = cursor.fetchall()
-        ensemble = {}  # L'ensemble des articles jusqu'à un max de 5 des plus récents
+        ensemble = {}
         if result is not None:
             for un_article_trouvee in result:
                 sous_ensemble = {'titre': un_article_trouvee[0], 'date_publication': un_article_trouvee[1]}
@@ -98,7 +98,6 @@ class Database:
         sql = update_from + update_set + update_where
         connection.execute(sql, (titre, paragraphe, identifiant))
         connection.commit()
-        # Valider si possible plutard si l'update a bien marché
 
     def ajouter_article(self, date_publication, titre, paragraphe, identifiant, auteur):
         connection = self.get_connection()
@@ -106,4 +105,3 @@ class Database:
                     "values(?, ?, ?, ?, ?)"
         connection.execute(insert_bd, (date_publication, titre, paragraphe, identifiant, auteur))
         connection.commit()
-        # Valider si possible plutard si l'ajout a bien marché

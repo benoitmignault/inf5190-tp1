@@ -1,10 +1,10 @@
-import re  # pour la gestion des pattern, ici pour la date
+import re  # pour la gestion des patterns pour les différents champs input
 
 from flask import g
 
 from .database import Database  # Importer le fichier database.py
 
-PATTERN_DATE = "(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])"
+PATTERN_DATE = "^([0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])$"  # Ce pattern est pour valider la date
 
 
 def get_db():
@@ -89,7 +89,6 @@ def remplissage_champs_modif_article(request, liste_champs):
 
 # Fonction utiliser lors d'ajout les articles
 # liste_champs représente ceux du fichier index.py liste_champs_admin
-
 def remplissage_champs_ajout_article(request, liste_champs):
     liste_champs['date_publication'] = request.form['date']
     liste_champs['titre'] = request.form['nom_article']
@@ -104,7 +103,6 @@ def remplissage_champs_ajout_article(request, liste_champs):
 # liste_champs représente ceux du fichier index.py liste_champs_admin
 # liste_validation représente ceux du fichier index.py liste_validation_admin
 # Le but était de simpliment aléger la lourdeur du code
-
 def validation_champs_article(liste_champs, liste_validation):
     # Validation pour le titre
     if liste_champs['titre'] == "":
@@ -120,7 +118,6 @@ def validation_champs_article(liste_champs, liste_validation):
     elif not (10 <= len(liste_champs['paragraphe']) <= 100):
         liste_validation['longueur_paragraphe_inv'] = True
 
-    # https://stackoverflow.com/questions/41129921/validate-an-iso-8601-datetime-string-in-python
     # Validation pour la date    
     if liste_champs['date_publication'] == "":
         liste_validation['champ_date_vide'] = True
