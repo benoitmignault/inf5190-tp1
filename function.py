@@ -105,64 +105,11 @@ def remplissage_champs_ajout_article(request, liste_champs):
 # liste_validation représente ceux du fichier index.py liste_validation_admin
 # Le but était de simpliment aléger la lourdeur du code
 def validation_champs_article(liste_champs, liste_validation):
-    # Validation pour le titre
-    if liste_champs['titre'] == "":
-        liste_validation['champ_titre_vide'] = True
-
-    else:
-        if not (3 <= len(liste_champs['titre']) <= 15):
-            liste_validation['longueur_titre_inv'] = True
-
-        match_titre = re.compile(PATTERN_TITRE).match
-        if match_titre(liste_champs['titre']) is None:
-            liste_validation['champ_titre_inv'] = True
-
-    # Validation pour le paragraphe    
-    if liste_champs['paragraphe'] == "":
-        liste_validation['champ_paragraphe_vide'] = True
-
-    else:
-        if not (10 <= len(liste_champs['paragraphe']) <= 100):
-            liste_validation['longueur_paragraphe_inv'] = True
-
-        match_paragraphe = re.compile(PATTERN_PARAGRAPHE).match
-        if match_paragraphe(liste_champs['paragraphe']) is None:
-            liste_validation['champ_paragraphe_inv'] = True
-
-    # Validation pour la date    
-    if liste_champs['date_publication'] == "":
-        liste_validation['champ_date_vide'] = True
-    else:
-        if not (len(liste_champs['date_publication']) == 10):
-            liste_validation['longueur_date_inv'] = True
-
-        match_date = re.compile(PATTERN_DATE).match
-        if match_date(liste_champs['date_publication']) is None:
-            liste_validation['champ_date_inv'] = True
-
-    # Validation pour l'identifiant
-    if liste_champs['identifiant'] == "":
-        liste_validation['champ_identifiant_vide'] = True
-
-    else:
-        if not (3 <= len(liste_champs['identifiant']) <= 15):
-            liste_validation['longueur_identifiant_inv'] = True
-
-        match_identifiant = re.compile(PATTERN_IDENTIFIANT).match
-        if match_identifiant(liste_champs['identifiant']) is None:
-            liste_validation['champ_identifiant_inv'] = True
-
-    # Validation pour l'auteur
-    if liste_champs['auteur'] == "":
-        liste_validation['champ_auteur_vide'] = True
-
-    else:
-        if not (3 <= len(liste_champs['auteur']) <= 15):
-            liste_validation['longueur_auteur_inv'] = True
-
-        match_auteur = re.compile(PATTERN_AUTEUR).match
-        if match_auteur(liste_champs['auteur']) is None:
-            liste_validation['champ_auteur_inv'] = True
+    liste_validation = validation_titre(liste_champs['titre'], liste_validation)
+    liste_validation = validation_paragraphe(liste_champs['paragraphe'], liste_validation)
+    liste_validation = validation_date(liste_champs['date_publication'], liste_validation)
+    liste_validation = validation_identifiant(liste_champs['identifiant'], liste_validation)
+    liste_validation = validation_auteur(liste_champs['auteur'], liste_validation)
 
     # Validation si on a au moins un champ vide
     if liste_validation['champ_titre_vide'] or liste_validation['champ_paragraphe_vide'] or \
@@ -181,6 +128,81 @@ def validation_champs_article(liste_champs, liste_validation):
         if liste_validation['champ_paragraphe_pareil'] and liste_validation['champ_titre_pareil']:
             liste_validation['aucune_modification'] = True
             # On calcul les validités sur les longueurs des champs
+
+    return liste_validation
+
+
+def validation_titre(titre, liste_validation):
+    if titre == "":
+        liste_validation['champ_titre_vide'] = True
+
+    else:
+        if not (3 <= len(titre) <= 15):
+            liste_validation['longueur_titre_inv'] = True
+
+        match_titre = re.compile(PATTERN_TITRE).match
+        if match_titre(titre) is None:
+            liste_validation['champ_titre_inv'] = True
+
+    return liste_validation
+
+
+def validation_paragraphe(paragraphe, liste_validation):
+    if paragraphe == "":
+        liste_validation['champ_paragraphe_vide'] = True
+
+    else:
+        if not (10 <= len(paragraphe) <= 100):
+            liste_validation['longueur_paragraphe_inv'] = True
+
+        match_paragraphe = re.compile(PATTERN_PARAGRAPHE).match
+        if match_paragraphe(paragraphe) is None:
+            liste_validation['champ_paragraphe_inv'] = True
+
+    return liste_validation
+
+
+def validation_date(date, liste_validation):
+    if date == "":
+        liste_validation['champ_date_vide'] = True
+    else:
+        if not (len(date) == 10):
+            liste_validation['longueur_date_inv'] = True
+
+        match_date = re.compile(PATTERN_DATE).match
+        if match_date(date) is None:
+            liste_validation['champ_date_inv'] = True
+
+    return liste_validation
+
+
+def validation_identifiant(identifiant, liste_validation):
+    if identifiant == "":
+        liste_validation['champ_identifiant_vide'] = True
+
+    else:
+        if not (3 <= len(identifiant) <= 15):
+            liste_validation['longueur_identifiant_inv'] = True
+
+        match_identifiant = re.compile(PATTERN_IDENTIFIANT).match
+        if match_identifiant(identifiant) is None:
+            liste_validation['champ_identifiant_inv'] = True
+
+    return liste_validation
+
+
+def validation_auteur(auteur, liste_validation):
+    # Validation pour l'auteur
+    if auteur == "":
+        liste_validation['champ_auteur_vide'] = True
+
+    else:
+        if not (3 <= len(auteur) <= 15):
+            liste_validation['longueur_auteur_inv'] = True
+
+        match_auteur = re.compile(PATTERN_AUTEUR).match
+        if match_auteur(auteur) is None:
+            liste_validation['champ_auteur_inv'] = True
 
     return liste_validation
 
