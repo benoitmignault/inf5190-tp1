@@ -4,6 +4,7 @@
 <div class="container">
     <p class="desktop" id="hautPageDesktop"></p>
     <h2>Section pour rechercher un article dans l'inventaire</h2>
+    
     <form action="/recherche" method="post">
         <div class='zone_recherche'>
             <div class="article">
@@ -20,7 +21,7 @@
             </div>
             <div class="troisBTN">
                 <input class="bouton" type="submit" value="Recherche...">
-                <input class="bouton" type="reset" onClick="reset_recherche();" value="Effacer...">
+                <input class="bouton" onClick="reset_recherche();" type="reset" value="Effacer...">
             </div>
             {% if liste_validation['aucun_article_trouve'] %}
             <p class="aucun">{{liste_champs['messages']['zero_article_trouve']}}</p>

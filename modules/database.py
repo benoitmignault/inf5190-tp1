@@ -8,7 +8,9 @@ class Database:
 
     def get_connection(self):
         if self.connection is None:
+            # Créer la BD si elle n'existe pas
             self.connection = sqlite3.connect('db/tp1.db')
+
         return self.connection
 
     def disconnect(self):
@@ -19,19 +21,24 @@ class Database:
     def get_articles_recents(self):
         date_auj = date.today()
         cursor = self.get_connection().cursor()
-        select = "select auteur, date_publication, identifiant, paragraphe, titre "
+        select = "select auteur, date_publication, identifiant, " \
+                 "paragraphe, titre "
         fromm = "from article "
         where = "where date_publication <=? "
         order_by = "order by date_publication desc LIMIT 5"
         sql = select + fromm + where + order_by
         cursor.execute(sql, (date_auj,))
         result = cursor.fetchall()
-        ensemble = {}  # L'ensemble des articles jusqu'à un max de 5 des plus récents
+        # L'ensemble des articles jusqu'à un max de 5 des plus récents
+        ensemble = {}
         i = 0
         if result is not None:
             for un_article in result:
-                sous_ensemble = {'auteur': un_article[0], 'date_publication': un_article[1],
-                                 'identifiant': un_article[2], 'paragraphe': un_article[3], 'titre': un_article[4]}
+                sous_ensemble = {'auteur': un_article[0],
+                                 'date_publication': un_article[1],
+                                 'identifiant': un_article[2],
+                                 'paragraphe': un_article[3],
+                                 'titre': un_article[4]}
                 ensemble[i] = sous_ensemble
                 i += 1
 
@@ -51,7 +58,8 @@ class Database:
         ensemble_trouve = {}
         if result is not None:
             for un_article_trouvee in result:
-                sous_ensemble = {'titre': un_article_trouvee[0], 'date_publication': un_article_trouvee[1]}
+                sous_ensemble = {'titre': un_article_trouvee[0],
+                                 'date_publication': un_article_trouvee[1]}
                 ensemble_trouve[un_article_trouvee[2]] = sous_ensemble
 
         return ensemble_trouve
@@ -59,7 +67,8 @@ class Database:
     # Sera utiliser avec la route /article/<identifiant»
     def get_articles_selectionner(self, identifiant):
         cursor = self.get_connection().cursor()
-        select = "select auteur, date_publication, identifiant, paragraphe, titre "
+        select = "select auteur, date_publication, identifiant, " \
+                 "paragraphe, titre "
         fromm = "from article "
         where = "where identifiant = ?"
         sql = select + fromm + where
@@ -68,7 +77,9 @@ class Database:
         ensemble_trouve = {}
 
         if result is not None:
-            ensemble_trouve = {'auteur': result[0], 'date_publication': result[1], 'identifiant': result[2],
+            ensemble_trouve = {'auteur': result[0],
+                               'date_publication': result[1],
+                               'identifiant': result[2],
                                'paragraphe': result[3], 'titre': result[4]}
 
         return ensemble_trouve
@@ -85,7 +96,8 @@ class Database:
         ensemble = {}
         if result is not None:
             for un_article_trouvee in result:
-                sous_ensemble = {'titre': un_article_trouvee[0], 'date_publication': un_article_trouvee[1]}
+                sous_ensemble = {'titre': un_article_trouvee[0],
+                                 'date_publication': un_article_trouvee[1]}
                 ensemble[un_article_trouvee[2]] = sous_ensemble
 
         return ensemble
@@ -101,9 +113,12 @@ class Database:
         connection.commit()
 
     # Sera utiliser avec la route /admin-nouveau
-    def ajouter_article(self, date_publication, titre, paragraphe, identifiant, auteur):
+    def ajouter_article(self, date_publication, titre, paragraphe, identifiant,
+                        auteur):
         connection = self.get_connection()
-        insert_bd = "insert into article (date_publication, titre, paragraphe, identifiant, auteur) " \
-                    "values(?, ?, ?, ?, ?)"
-        connection.execute(insert_bd, (date_publication, titre, paragraphe, identifiant, auteur))
+        insert_bd = "insert into article (date_publication, titre, " \
+                    "paragraphe, identifiant, auteur) values(?, ?, ?, ?, ?)"
+        connection.execute(insert_bd, (
+            date_publication, titre, paragraphe, identifiant,
+            auteur))
         connection.commit()
